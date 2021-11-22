@@ -45,12 +45,12 @@ public class CameraController : MonoBehaviour
         _activeCamera.transform.position = targetPos;
 
         //if mouse is clicked, set origin of drag
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(2))
         {
             _mouseClickedPosition = Input.mousePosition;
             _isClicked = true;
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(2))
         {
             _isClicked = false;
         }
