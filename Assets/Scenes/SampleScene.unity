@@ -162,10 +162,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb83ee1342c485b4b96f5a7f5ce75d6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoomSpeed: 1
-  dragSpeed: 2
-  smoothSpeed: 2
-  targetOrtho: 0
+  zoomSpeed: 2
+  dragSpeed: 0.1
+  smoothZoomValue: 0.1
   minZoom: 1
   maxZoom: 20
 --- !u!20 &519420031
