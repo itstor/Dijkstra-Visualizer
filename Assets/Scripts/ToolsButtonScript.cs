@@ -17,6 +17,12 @@ public class ToolsButtonScript : MonoBehaviour
         Connect,
         Add,
     }
+
+    private void Update() {
+        if (_CursorInstance.currentState == (CursorStateManager.CursorState)_ToolType){
+            Debug.Log("ToolType: " + _ToolType);
+        }
+    }
     public void OnButtonSwitch()
     {
         switch (_ToolType)
@@ -25,10 +31,10 @@ public class ToolsButtonScript : MonoBehaviour
                 _CursorInstance.currentState = CursorStateManager.CursorState.Select;
                 break;
             case ToolsType.Connect:
-                _CursorInstance.currentState = _CursorInstance.currentState == CursorStateManager.CursorState.Connect ? CursorStateManager.CursorState.Select : CursorStateManager.CursorState.Connect;
+                _CursorInstance.currentState = CursorStateManager.CursorState.Connect;
                 break;
             case ToolsType.Add:
-                _CursorInstance.currentState = _CursorInstance.currentState == CursorStateManager.CursorState.Add ? CursorStateManager.CursorState.Select : CursorStateManager.CursorState.Add;
+                _CursorInstance.currentState = CursorStateManager.CursorState.Add;
                 break;
         }
     }
