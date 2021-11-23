@@ -11,9 +11,9 @@ public class CursorStateManager : MonoBehaviour
 
     public enum CursorState
     {
-        Idle,
-        Drag,
-        Connect
+        Select,
+        Connect,
+        Add,
     }
 
     void Awake()
@@ -25,20 +25,5 @@ public class CursorStateManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    public void setStateDrag()
-    {
-        currentState = currentState != CursorState.Drag ? CursorState.Drag : CursorState.Idle;
-    }
-
-    public void setStateIdle()
-    {
-        currentState = CursorState.Idle;
-    }
-
-    public void setStateConnect()
-    {
-        currentState = CursorState.Connect;
     }
 }
