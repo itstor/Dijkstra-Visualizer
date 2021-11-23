@@ -21,7 +21,7 @@ public class ToolsButtonScript : MonoBehaviour
 
     void Update() {
         if (_CursorInstance.currentState == (CursorStateManager.CursorState)_ToolType){
-            gameObject.GetComponent<Image>().color = Color.green;
+            gameObject.GetComponent<Image>().color = Color.blue;
         }
         else{
             gameObject.GetComponent<Image>().color = Color.white;
