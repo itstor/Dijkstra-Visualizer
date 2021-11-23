@@ -1,9 +1,10 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class ToolsButtonScript : MonoBehaviour
 {
-
     [SerializeField] private ToolsType _ToolType;
     private CursorStateManager _CursorInstance;
 
@@ -18,9 +19,12 @@ public class ToolsButtonScript : MonoBehaviour
         Add,
     }
 
-    private void Update() {
+    void Update() {
         if (_CursorInstance.currentState == (CursorStateManager.CursorState)_ToolType){
-            Debug.Log("ToolType: " + _ToolType);
+            gameObject.GetComponent<Image>().color = Color.green;
+        }
+        else{
+            gameObject.GetComponent<Image>().color = Color.white;
         }
     }
     public void OnButtonSwitch()
