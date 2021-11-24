@@ -3,7 +3,23 @@ using UnityEngine;
 public class NodeMouseControl : MonoBehaviour
 {
     private Vector3 _dragOffset;
-    public SpriteRenderer nodeSprite;
+    private SpriteRenderer _nodeSprite;
+    private bool _isHover;
+    [SerializeField] private float _fadeSpeed;
+
+    void Update() {
+        if (_isHover){
+            _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.red, Time.deltaTime * _fadeSpeed);
+        }
+        else {
+            _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.white, Time.deltaTime * _fadeSpeed);
+        }
+    }
+
+    void Start()
+    {
+        _nodeSprite = GetComponent<SpriteRenderer>();
+    }
 
     void OnMouseDown() {
         if (Input.GetMouseButton(0) && CursorStateManager.Instance.currentState == CursorStateManager.CursorState.Select)
@@ -19,10 +35,10 @@ public class NodeMouseControl : MonoBehaviour
     }
 
     void OnMouseEnter() {
-        nodeSprite.color = Color.red;
+        _isHover = true;
     }
 
     void OnMouseExit() {
-        nodeSprite.color = Color.white;
+        _isHover = false;
     }
 }

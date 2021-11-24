@@ -38,7 +38,9 @@ public class ToolsButtonScript : MonoBehaviour
                 _CursorInstance.currentState = CursorStateManager.CursorState.Connect;
                 break;
             case ToolsType.Add:
+            {
                 _CursorInstance.currentState = CursorStateManager.CursorState.Add;
+            }
                 break;
         }
     }
