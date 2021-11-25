@@ -74,3 +74,6 @@ crashlytics-build.properties
 
 #Temporary file
 .temp/
+
+#Third-party assets
+Assets/TextMesh Pro
