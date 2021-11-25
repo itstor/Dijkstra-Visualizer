@@ -12,6 +12,7 @@ public class NodeMouseControl : MonoBehaviour
     public GameObject _edgeLinePrefab;
     private GameObject _currentActiveLine;
     private Color _originalColor;
+    public GameObject _glowEffect;
 
 
     void Start()
@@ -25,11 +26,13 @@ public class NodeMouseControl : MonoBehaviour
     {
         if (_isHover)
         {
-            _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.red, Time.deltaTime * _fadeSpeed);
+            float newScale = Mathf.SmoothStep(_glowEffect.transform.localScale.x, 1f, _fadeSpeed * Time.deltaTime);
+            _glowEffect.transform.localScale = new Vector3(newScale, newScale, newScale);
         }
         else
         {
-            _nodeSprite.color = Color.Lerp(_nodeSprite.color, _originalColor, Time.deltaTime * _fadeSpeed);
+            float newScale = Mathf.SmoothStep(_glowEffect.transform.localScale.x, 0.5f, _fadeSpeed * Time.deltaTime);
+            _glowEffect.transform.localScale = new Vector3(newScale, newScale, newScale);
         }
     }
 
