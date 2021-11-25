@@ -79,15 +79,15 @@ public class NodeMouseControl : MonoBehaviour
             {
                 if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
                 {
-                    Debug.Log("Hit");
-                    Debug.Log(hit.collider.gameObject.GetComponentInChildren<TMPro.TextMeshPro>().text);
+                    Vector3 objectPosition = hit.collider.gameObject.transform.position;
+                    _currentActiveLine.GetComponent<LineRenderer>().SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
+                    _currentActiveLine.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
+                    return;
                 }
             }
-            else
-            {
-                Debug.Log("Miss");
-                Destroy(_currentActiveLine);
-            }
+            Debug.Log("Miss");
+            _edgeLinePrefabs.Remove(_currentActiveLine);
+            Destroy(_currentActiveLine);
         }
     }
 
