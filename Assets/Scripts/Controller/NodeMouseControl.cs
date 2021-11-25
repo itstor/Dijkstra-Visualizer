@@ -8,14 +8,18 @@ public class NodeMouseControl : MonoBehaviour
     private SpriteRenderer _nodeSprite;
     private bool _isHover;
     [SerializeField] private float _fadeSpeed;
-    private List<LineRenderer> _edgeLines;
-    private LineRenderer _lineOri;
+    private List<GameObject> _edgeLinePrefabs;
+    public GameObject _edgeLinePrefab;
+    private GameObject _currentActiveLine;
 
-    void Update() {
-        if (_isHover){
+    void Update()
+    {
+        if (_isHover)
+        {
             _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.red, Time.deltaTime * _fadeSpeed);
         }
-        else {
+        else
+        {
             _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.white, Time.deltaTime * _fadeSpeed);
         }
     }
@@ -23,21 +27,24 @@ public class NodeMouseControl : MonoBehaviour
     void Start()
     {
         _nodeSprite = GetComponent<SpriteRenderer>();
-        _edgeLines = new List<LineRenderer>();
-        // _lineOri = gameObject.Get
-        InitLinePosition();
+        _edgeLinePrefabs = new List<GameObject>();
     }
 
-    void OnMouseDown() {
-        if (Input.GetMouseButton(0)){
+    void OnMouseDown()
+    {
+        if (Input.GetMouseButton(0))
+        {
             switch (CursorStateManager.Instance.currentState)
             {
                 case CursorStateManager.CursorState.Select:
                     _dragOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-                break;
+                    break;
                 case CursorStateManager.CursorState.Connect:
-                    // Instantiate
-                break;
+                    GameObject newLine = Instantiate(_edgeLinePrefab, transform.position, Quaternion.identity);
+                    InitLinePosition(newLine);
+                    _currentActiveLine = newLine;
+                    _edgeLinePrefabs.Add(newLine);
+                    break;
                 default: break;
             }
         }
@@ -45,17 +52,18 @@ public class NodeMouseControl : MonoBehaviour
 
     void OnMouseDrag()
     {
-        if (Input.GetMouseButton(0)){
+        if (Input.GetMouseButton(0))
+        {
             switch (CursorStateManager.Instance.currentState)
             {
                 case CursorStateManager.CursorState.Select:
                     Vector2 newPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) + _dragOffset;
                     gameObject.transform.position = newPosition;
-                    UpdateLinePosition();
-                break;
+                    UpdateAllLinePosition();
+                    break;
                 case CursorStateManager.CursorState.Connect:
-                    // _edgeLine.SetPosition(1, new Vector3(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y, 0));
-                break;
+                    UpdateSingleLinePosition(_currentActiveLine);
+                    break;
                 default: break;
             }
         }
@@ -63,31 +71,58 @@ public class NodeMouseControl : MonoBehaviour
 
     void OnMouseUp()
     {
+        if (CursorStateManager.Instance.currentState == CursorStateManager.CursorState.Connect)
+        {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
             if (hit)
             {
-                if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject){
+                if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
+                {
                     Debug.Log("Hit");
                     Debug.Log(hit.collider.gameObject.GetComponentInChildren<TMPro.TextMeshPro>().text);
                 }
             }
+            else
+            {
+                Debug.Log("Miss");
+                Destroy(_currentActiveLine);
+            }
+        }
     }
 
-    void OnMouseEnter() {
+    void OnMouseEnter()
+    {
         _isHover = true;
     }
 
-    void OnMouseExit() {
+    void OnMouseExit()
+    {
         _isHover = false;
     }
-    
-    void InitLinePosition(){
-        // _edgeLine.SetPosition(0, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
-        // _edgeLine.SetPosition(1, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
+
+    void InitLinePosition(GameObject line)
+    {
+        LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
+        
+        lineRenderer.SetPosition(0, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
+        lineRenderer.SetPosition(1, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
+        line.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
     }
 
-    void UpdateLinePosition(){
-        // _edgeLine.SetPosition(0, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
+    void UpdateSingleLinePosition(GameObject line, int index = 1)
+    {
+        LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        lineRenderer.SetPosition(index, new Vector3(mousePosition.x, mousePosition.y, 0));
+        line.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
+    }
+
+    void UpdateAllLinePosition(){
+        foreach (GameObject line in _edgeLinePrefabs)
+        {
+            UpdateSingleLinePosition(line, 0);
+        }
     }
 }
