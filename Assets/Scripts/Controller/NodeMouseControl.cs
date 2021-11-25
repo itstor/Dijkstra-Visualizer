@@ -11,6 +11,15 @@ public class NodeMouseControl : MonoBehaviour
     private List<GameObject> _edgeLinePrefabs;
     public GameObject _edgeLinePrefab;
     private GameObject _currentActiveLine;
+    private Color _originalColor;
+
+
+    void Start()
+    {
+        _nodeSprite = GetComponent<SpriteRenderer>();
+        _edgeLinePrefabs = new List<GameObject>();
+        _originalColor = _nodeSprite.color;
+    }
 
     void Update()
     {
@@ -20,14 +29,8 @@ public class NodeMouseControl : MonoBehaviour
         }
         else
         {
-            _nodeSprite.color = Color.Lerp(_nodeSprite.color, Color.white, Time.deltaTime * _fadeSpeed);
+            _nodeSprite.color = Color.Lerp(_nodeSprite.color, _originalColor, Time.deltaTime * _fadeSpeed);
         }
-    }
-
-    void Start()
-    {
-        _nodeSprite = GetComponent<SpriteRenderer>();
-        _edgeLinePrefabs = new List<GameObject>();
     }
 
     void OnMouseDown()
