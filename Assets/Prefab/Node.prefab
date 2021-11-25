@@ -229,6 +229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _fadeSpeed: 0
+  _edgeLinePrefab: {fileID: 3116991365317928027, guid: 24a1e26923f6e4147a536a9b5f54c665, type: 3}
 --- !u!114 &1553801972219275606
 MonoBehaviour:
   m_ObjectHideFlags: 0
