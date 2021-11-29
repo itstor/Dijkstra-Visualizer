@@ -1,39 +1,26 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class NodeMouseControl : MonoBehaviour
 {
     private Vector3 _dragOffset;
-    private SpriteRenderer _nodeSprite;
-    private bool _isHover;
-    [SerializeField] private float _fadeSpeed;
     private List<GameObject> _edgeLinePrefabs;
     public GameObject _edgeLinePrefab;
     private GameObject _currentActiveLine;
-    private Color _originalColor;
-    public GameObject _glowEffect;
+    private List<GameObject> _edgeLineNeighbourPrefabs;
+    private INodeStateController _modeControl;
 
 
+void OnDestroy() {
+ for (int i = 0; i < _edgeLinePrefabs.Count; i++) {
+     Destroy(_edgeLinePrefabs[i]);
+ }   
+}
     void Start()
     {
-        _nodeSprite = GetComponent<SpriteRenderer>();
+        _modeControl = GetComponent<NodeStateController>();
         _edgeLinePrefabs = new List<GameObject>();
-        _originalColor = _nodeSprite.color;
-    }
-
-    void Update()
-    {
-        if (_isHover)
-        {
-            float newScale = Mathf.SmoothStep(_glowEffect.transform.localScale.x, 1f, _fadeSpeed * Time.deltaTime);
-            _glowEffect.transform.localScale = new Vector3(newScale, newScale, newScale);
-        }
-        else
-        {
-            float newScale = Mathf.SmoothStep(_glowEffect.transform.localScale.x, 0.5f, _fadeSpeed * Time.deltaTime);
-            _glowEffect.transform.localScale = new Vector3(newScale, newScale, newScale);
-        }
+        _edgeLineNeighbourPrefabs = new List<GameObject>();
     }
 
     void OnMouseDown()
@@ -68,6 +55,7 @@ public class NodeMouseControl : MonoBehaviour
                     UpdateAllLinePosition();
                     break;
                 case CursorStateManager.CursorState.Connect:
+                    _modeControl.OnSelected();
                     UpdateSingleLinePosition(_currentActiveLine);
                     break;
                 default: break;
@@ -81,17 +69,24 @@ public class NodeMouseControl : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+
+            _modeControl.OnDeselected();
+
             if (hit)
             {
                 if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
                 {
                     Vector3 objectPosition = hit.collider.gameObject.transform.position;
                     _currentActiveLine.GetComponent<LineRenderer>().SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
-                    _currentActiveLine.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
+                    _currentActiveLine.GetComponent<EdgeLineScript>().updateEdgeLinePos();
+                    hit.collider.gameObject.GetComponent<NodeMouseControl>()._edgeLineNeighbourPrefabs.Add(_currentActiveLine);
+
+                    // hit.collider.gameObject.GetComponent<Node>().Add(gameObject.GetComponent<Node>(), 100);
+
                     return;
                 }
             }
-            Debug.Log("Miss");
+            
             _edgeLinePrefabs.Remove(_currentActiveLine);
             Destroy(_currentActiveLine);
         }
@@ -99,12 +94,12 @@ public class NodeMouseControl : MonoBehaviour
 
     void OnMouseEnter()
     {
-        _isHover = true;
+        _modeControl.OnSelected();
     }
 
     void OnMouseExit()
     {
-        _isHover = false;
+        _modeControl.OnDeselected();
     }
 
     void InitLinePosition(GameObject line)
@@ -113,22 +108,38 @@ public class NodeMouseControl : MonoBehaviour
         
         lineRenderer.SetPosition(0, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
         lineRenderer.SetPosition(1, new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, 0));
-        line.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
+        line.GetComponent<EdgeLineScript>().updateEdgeLinePos();
     }
 
-    void UpdateSingleLinePosition(GameObject line, int index = 1)
+    void UpdateSingleLinePosition(GameObject line, int index = 1, bool drag_node = false)
     {
         LineRenderer lineRenderer = line.GetComponent<LineRenderer>();
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        lineRenderer.SetPosition(index, new Vector3(mousePosition.x, mousePosition.y, 0));
-        line.GetComponentInChildren<EdgeArrowScript>().UpdateArrowPosition();
+        if (!drag_node)
+        {
+            lineRenderer.SetPosition(index, new Vector3(mousePosition.x, mousePosition.y, 0));
+        }
+        else
+        {
+            lineRenderer.SetPosition(index, new Vector3(transform.position.x, transform.position.y, 0));
+        }
+        line.GetComponent<EdgeLineScript>().updateEdgeLinePos();
     }
 
     void UpdateAllLinePosition(){
         foreach (GameObject line in _edgeLinePrefabs)
         {
-            UpdateSingleLinePosition(line, 0);
+            UpdateSingleLinePosition(line, 0, true);
         }
+        foreach (GameObject line in _edgeLineNeighbourPrefabs)
+        {
+            UpdateSingleLinePosition(line, 1, true);
+        }
+    }
+
+    void AddEdgeLineNeighbour(GameObject line)
+    {
+        _edgeLineNeighbourPrefabs.Add(line);
     }
 }
