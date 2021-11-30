@@ -6,7 +6,7 @@ namespace states {
         Add,
     }
 
-    public enum ToolType
+    public enum ToolsType
     {
         Select,
         Connect,
