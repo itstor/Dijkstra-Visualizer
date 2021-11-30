@@ -5,12 +5,7 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     public string nodeName {get; set;}
-    public Dictionary<Node, EdgeData> connectedNodes;
-
-    void Start()
-    {
-        connectedNodes = new Dictionary<Node, EdgeData>();
-    }
+    public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
 
     // return true if the node is not already connected, false otherwise
     public bool connect(Node to, EdgeData edge_data)
@@ -34,8 +29,8 @@ public class Node : MonoBehaviour
     }
 
     public void deleteNode(){
+        GraphManager.Instance.deleteNode(this);
+
         Destroy(this.gameObject);
-        
-        // TODO delete all the edge lines connected to this node
     }
 }

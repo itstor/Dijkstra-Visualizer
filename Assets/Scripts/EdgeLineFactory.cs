@@ -23,6 +23,11 @@ public class EdgeLineFactory: MonoBehaviour
     public GameObject createEdgeLine(Vector3 position){
         var edgeLine = Instantiate(edgeLinePrefab, position, Quaternion.identity);
         
+        edgeLine.GetComponent<LineRenderer>().SetPositions(new Vector3[] {
+            new Vector3(position.x, position.y, 0),
+            new Vector3(position.x, position.y, 0)
+        });
+        
         edgeLine.transform.position = position;
 
         return edgeLine;
