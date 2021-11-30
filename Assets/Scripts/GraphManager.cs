@@ -40,7 +40,7 @@ public class GraphManager: MonoBehaviour
         mContainer[to].Item2.Add(edge_data);
     }
 
-    void updateDeleted(Node node){
+    public void deleteNode(Node node){
         if (mContainer.ContainsKey(node))
         {
             foreach (EdgeData line in mContainer[node].Item1)
