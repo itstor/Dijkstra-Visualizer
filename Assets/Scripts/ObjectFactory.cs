@@ -37,10 +37,6 @@ public class ObjectFactory: MonoBehaviour
     }
 
     public GameObject createNode(Vector3 position){
-        var node = Instantiate(nodePrefab, position, Quaternion.identity);
-
-        node.transform.position = position;
-
-        return node;
+        return Instantiate(nodePrefab, position, Quaternion.identity);
     }
 }
