@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
         {
             Vector3 currMousePos = Input.mousePosition;
             Vector3 dragPosDiff = currMousePos - _mouseClickedPosition;
-            _activeCamera.transform.position += dragPosDiff * dragSpeed * Time.deltaTime;
+            _activeCamera.transform.position -= dragPosDiff * dragSpeed * Time.deltaTime;
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
