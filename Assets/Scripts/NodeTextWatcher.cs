@@ -5,6 +5,7 @@ public class NodeTextWatcher : MonoBehaviour {
     private TMPro.TextMeshPro mTextMesh;
     private Node mNode;
     void Start() {
+        mNode = GetComponent<Node>();
         mTextMesh = GetComponentInChildren<TMPro.TextMeshPro>();    
         mTextMesh.text = GetComponent<Node>().nodeName;
     }
