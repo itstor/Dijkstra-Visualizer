@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class EdgeLineFactory: MonoBehaviour
+public class ObjectFactory: MonoBehaviour
 {
-    public static EdgeLineFactory Instance = null;
-    public GameObject edgeLinePrefab;
+    public static ObjectFactory Instance = null;
+    [SerializeField] private GameObject edgeLinePrefab;
+    [SerializeField] private GameObject nodePrefab;
 
     void Awake()
     {
@@ -33,5 +34,13 @@ public class EdgeLineFactory: MonoBehaviour
         edgeLine.transform.position = position;
 
         return edgeLine;
+    }
+
+    public GameObject createNode(Vector3 position){
+        var node = Instantiate(nodePrefab, position, Quaternion.identity);
+
+        node.transform.position = position;
+
+        return node;
     }
 }
