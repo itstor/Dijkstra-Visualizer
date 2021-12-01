@@ -180,9 +180,10 @@ GameObject:
   - component: {fileID: 5000546132980392260}
   - component: {fileID: 5000546132980392261}
   - component: {fileID: 5000546132980392259}
-  - component: {fileID: 1553801972219275606}
-  - component: {fileID: 5000546132980392262}
-  - component: {fileID: 1772007969195490599}
+  - component: {fileID: 5451222595341336163}
+  - component: {fileID: 6287587857474877988}
+  - component: {fileID: 2022672878564989827}
+  - component: {fileID: 4728188276884025491}
   m_Layer: 0
   m_Name: Node
   m_TagString: Node
@@ -273,7 +274,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.21
---- !u!114 &1553801972219275606
+--- !u!114 &5451222595341336163
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,11 +283,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5000546132980392263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89b05428644c974428b7300f1a3d2fa3, type: 3}
+  m_Script: {fileID: 11500000, guid: 347a2c6815e9c7846837d8dd963e2abf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   nodeName: 
---- !u!114 &5000546132980392262
+--- !u!114 &6287587857474877988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -295,11 +296,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5000546132980392263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 098b7244203cac445a10220c65faefba, type: 3}
+  m_Script: {fileID: 11500000, guid: 07e34e003a7d9a749a0b0d9b277cf5ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _edgeLinePrefab: {fileID: 3116991365317928027, guid: 24a1e26923f6e4147a536a9b5f54c665, type: 3}
---- !u!114 &1772007969195490599
+--- !u!114 &2022672878564989827
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -308,18 +308,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 5000546132980392263}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65b12dfe6f0912c4593c52ce73d9818c, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fe627405172cae4bb6b573a8c6917fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _colorFadeSpeed: 3
   _glowAnimSpeed: 6
   _nodeCurrentColor: {r: 0.34117648, g: 0.9215687, b: 0.6392157, a: 1}
-  _defaultColor: {r: 0.34117648, g: 0.9215687, b: 0.6392157, a: 1}
-  _accessedColor: {r: 0.99607843, g: 0.8666667, b: 0.28627452, a: 1}
-  _pathColor: {r: 0.35686275, g: 0.5529412, b: 0.93333334, a: 1}
-  _visitedColor: {r: 1, g: 0.36078432, b: 0.36078432, a: 1}
-  _glowSpriteRenderer: {fileID: 9094729132348883050}
-  _glowTransform: {fileID: 7545308162304054408}
+  _defaultColor: {r: 0.34117648, g: 0.9176471, b: 0.63529414, a: 1}
+  _accessedColor: {r: 0, g: 0, b: 0, a: 0}
+  _pathColor: {r: 0, g: 0, b: 0, a: 0}
+  _visitedColor: {r: 0, g: 0, b: 0, a: 0}
+  _selectedColor: {r: 0, g: 0, b: 0, a: 0}
+  _glowGameObject: {fileID: 7545308162304054408}
+--- !u!114 &4728188276884025491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5000546132980392263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4aa9ff113df4db42a729dbc791d449b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7545308162304054408
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,10 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AppManager : MonoBehaviour {
 
-    public static AppManager Instance = null;                         
+    public static AppManager Instance = null;
+    public int targetFrameRate;                         
 
     void Awake()
     {
@@ -19,7 +18,7 @@ public class AppManager : MonoBehaviour {
         }
 
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = targetFrameRate;
 
         DontDestroyOnLoad(gameObject);
     }

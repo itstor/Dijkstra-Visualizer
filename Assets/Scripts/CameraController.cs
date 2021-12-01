@@ -2,15 +2,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private Camera _activeCamera;
     public float zoomSpeed, dragSpeed;
     public float smoothZoomValue;
     public float minZoom, maxZoom;
-    private float _targetZoomValue;
-    private Vector3 _mouseClickedPosition;
-    private bool _isClicked = false;
 
-    private void Start()
+    private float _targetZoomValue;
+    private bool _isClicked = false;
+    private Vector3 _mouseClickedPosition;
+    private Camera _activeCamera;
+
+    void Start()
     {
         _activeCamera = Camera.main;
         _targetZoomValue = _activeCamera.orthographicSize;
@@ -32,19 +33,21 @@ public class CameraController : MonoBehaviour
             _targetZoomValue -= scroll * zoomSpeed;
             _targetZoomValue = Mathf.Clamp(_targetZoomValue, minZoom, maxZoom);
         }
+
         //get mouse position before zoom
-        Vector3 mousePos1 = _activeCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos1 = getMouseWorldPoint();
 
         _activeCamera.orthographicSize = Mathf.Lerp(_activeCamera.orthographicSize, _targetZoomValue, smoothZoomValue);
 
         //get mouse position after zoom
-        Vector3 mousePos2 = _activeCamera.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos2 = getMouseWorldPoint();
+        
         Vector3 mousePositionDiff = mousePos1 - mousePos2;
 
         Vector3 targetPos = _activeCamera.transform.position + mousePositionDiff;
         _activeCamera.transform.position = targetPos;
 
-        //if mouse is clicked, set origin of drag
+        //if middle mouse button is clicked, set origin of drag
         if (Input.GetMouseButton(2))
         {
             _mouseClickedPosition = Input.mousePosition;
@@ -54,5 +57,10 @@ public class CameraController : MonoBehaviour
         {
             _isClicked = false;
         }
+    }
+
+    private Vector3 getMouseWorldPoint()
+    {
+        return _activeCamera.ScreenToWorldPoint(Input.mousePosition);
     }
 }

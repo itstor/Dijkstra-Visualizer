@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7847782824850289826}
   - component: {fileID: 8665287421327783248}
-  - component: {fileID: 3577897922279724949}
+  - component: {fileID: 4539859552410326391}
+  - component: {fileID: 5223481511573283813}
   m_Layer: 0
   m_Name: EdgeLine
   m_TagString: Untagged
@@ -76,7 +77,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 1, z: 0}
+  - {x: 0, y: 0.51, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -132,7 +133,7 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!114 &3577897922279724949
+--- !u!114 &4539859552410326391
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -141,12 +142,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 3116991365317928027}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea6c10f312ef02c469361f6afe309f6d, type: 3}
+  m_Script: {fileID: 11500000, guid: ed51afc2143765e4fb9ae77986143b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _distance: 100
-  _arrowGameObject: {fileID: 7765189231298784840}
-  _textDistanceGameObject: {fileID: 7104686394656893187}
+--- !u!114 &5223481511573283813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3116991365317928027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d15528e063b879478a7596968d51e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7104686394656893187
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +191,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00030598044, y: 0.466}
+  m_AnchoredPosition: {x: -0.359, y: 0.466}
   m_SizeDelta: {x: 2.193, y: 0.8225}
   m_Pivot: {x: 0.5, y: 0.06997689}
 --- !u!23 &7170564500313949722

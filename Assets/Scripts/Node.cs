@@ -4,25 +4,35 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public string nodeName;
-    private TMPro.TextMeshPro _textMesh;
-    public Dictionary<Node, float> connectedNodes;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] public string nodeName;
+    public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
+
+    // return true if the node is not already connected, false otherwise
+    public bool connect(Node to, EdgeData edge_data)
     {
-        _textMesh = gameObject.GetComponentInChildren<TMPro.TextMeshPro>();
-        _textMesh.text = nodeName;
-        connectedNodes = new Dictionary<Node, float>();
+        if (!connectedNodes.ContainsKey(to))
+        {
+            connectedNodes.Add(to, edge_data);
+            
+            return true;
+        }
+
+        return false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    /* check if this node already connected to the given node. If so, return true, otherwise false.
+    This function is used to change the shape of edge line arrow */
+    public void checkTwoWayConnection(Node from){
+        if (connectedNodes.ContainsKey(from))
+        {
+            Debug.Log("Two Way");
+            connectedNodes[from].isTwoWay = true;
+        }
     }
 
-    public void Add(ref Node node, float distance)
-    {
-        connectedNodes.Add(node, distance);
+    public void deleteNode(){
+        GraphManager.Instance.deleteNode(this);
+
+        Destroy(this.gameObject);
     }
 }

@@ -7,14 +7,7 @@ public class CursorStateManager : MonoBehaviour
 {
 
     public static CursorStateManager Instance = null;
-    public CursorState currentState;
-
-    public enum CursorState
-    {
-        Select,
-        Connect,
-        Add,
-    }
+    public states.CursorState currentState;
 
     void Awake()
     {
