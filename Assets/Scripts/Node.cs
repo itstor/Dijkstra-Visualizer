@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    public string nodeName {get; set;}
+    [SerializeField] public string nodeName;
     public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
 
     // return true if the node is not already connected, false otherwise
@@ -13,6 +13,7 @@ public class Node : MonoBehaviour
         if (!connectedNodes.ContainsKey(to))
         {
             connectedNodes.Add(to, edge_data);
+            
             return true;
         }
 
@@ -24,6 +25,7 @@ public class Node : MonoBehaviour
     public void checkTwoWayConnection(Node from){
         if (connectedNodes.ContainsKey(from))
         {
+            Debug.Log("Two Way");
             connectedNodes[from].isTwoWay = true;
         }
     }

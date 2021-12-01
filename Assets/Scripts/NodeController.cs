@@ -78,16 +78,18 @@ public class NodeController : MonoBehaviour
                 if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
                 {
                     Vector3 objectPosition = hit.collider.gameObject.transform.position;
-                    mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
-                    mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
-                    mNode.connect(hit.collider.gameObject.GetComponent<Node>(), mCurrentActiveLine.GetComponent<EdgeData>());
-                    mNode.checkTwoWayConnection(hit.collider.gameObject.GetComponent<Node>());
-                    
                     var otherNode = hit.collider.gameObject.GetComponent<Node>();
                     var edgeData = mCurrentActiveLine.GetComponent<EdgeData>();
-                    GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
 
-                    return;
+                    mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
+                    mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
+                    
+                    if (mNode.connect(otherNode, edgeData)){
+                        otherNode.checkTwoWayConnection(mNode);   
+                        GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
+
+                        return;
+                    }
                 }
             }
             
