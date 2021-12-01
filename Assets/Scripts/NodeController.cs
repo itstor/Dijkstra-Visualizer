@@ -23,6 +23,7 @@ public class NodeController : MonoBehaviour
             {
                 case states.CursorState.Select:
                     mDragOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+                    AppManager.Instance.m_SelectedNode = this.gameObject;
                     
                     break;
 
@@ -51,7 +52,7 @@ public class NodeController : MonoBehaviour
 
                 case states.CursorState.Connect:
                     var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mNodeState.onActive();
+                    mNodeState.onHover();
                     EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, mousePosition, 1);
                     
                     if (mCurrentActiveLine.activeInHierarchy == false){
@@ -71,7 +72,7 @@ public class NodeController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            mNodeState.onDeactive();
+            mNodeState.onExitHover();
 
             if (hit)
             {
@@ -85,9 +86,9 @@ public class NodeController : MonoBehaviour
                     mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
                     
                     if (mNode.connect(otherNode, edgeData)){
-                        
+
                          // TODO : dirty method. gonna find another method
-                        if(otherNode.checkTwoWayConnection(mNode)){
+                        if (otherNode.checkTwoWayConnection(mNode)){
                             mNode.getEdgeData(otherNode).GetComponent<EdgeData>().isTwoWay = true;
                         }
                         GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
@@ -104,11 +105,11 @@ public class NodeController : MonoBehaviour
     void OnMouseEnter()
     {
         Debug.Log("Mouse enter");
-        mNodeState.onActive();
+        mNodeState.onHover();
     }
 
     void OnMouseExit()
     {
-        mNodeState.onDeactive();
+        mNodeState.onExitHover();
     }
 }
