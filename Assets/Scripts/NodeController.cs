@@ -7,12 +7,12 @@ public class NodeController : MonoBehaviour
     private NodeState mNodeState;
     private GameObject mCurrentActiveLine;
     private LineRenderer mCurrentActiveLineRenderer;
-    private Node mNnode;
+    private Node mNode;
 
     void Start()
     {
         mNodeState = GetComponent<NodeState>();
-        mNnode = GetComponent<Node>();
+        mNode = GetComponent<Node>();
     }
 
     void OnMouseDown()
@@ -45,14 +45,19 @@ public class NodeController : MonoBehaviour
                 case states.CursorState.Select:
                     gameObject.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + mDragOffset;
 
-                    EdgeLineController.updateMultipleEdgeLinePosition(mNnode);
+                    EdgeLineController.updateMultipleEdgeLinePosition(GraphManager.Instance.getEdgeList(mNode), transform.position);
                     
                     break;
 
                 case states.CursorState.Connect:
+                    var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     mNodeState.onActive();
-                    EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, transform.position, 1);
+                    EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, mousePosition, 1);
                     
+                    if (mCurrentActiveLine.activeInHierarchy == false){
+                        mCurrentActiveLine.SetActive(true);
+                    }
+
                     break;
                 default: break;
             }
@@ -75,10 +80,12 @@ public class NodeController : MonoBehaviour
                     Vector3 objectPosition = hit.collider.gameObject.transform.position;
                     mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
                     mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
+                    mNode.connect(hit.collider.gameObject.GetComponent<Node>(), mCurrentActiveLine.GetComponent<EdgeData>());
+                    mNode.checkTwoWayConnection(hit.collider.gameObject.GetComponent<Node>());
                     
-                    var thisNode = GetComponent<Node>();
+                    var otherNode = hit.collider.gameObject.GetComponent<Node>();
                     var edgeData = mCurrentActiveLine.GetComponent<EdgeData>();
-                    GraphManager.Instance.addEdgeLine(mNnode, thisNode, edgeData);
+                    GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
 
                     return;
                 }
@@ -90,6 +97,7 @@ public class NodeController : MonoBehaviour
 
     void OnMouseEnter()
     {
+        Debug.Log("Mouse enter");
         mNodeState.onActive();
     }
 

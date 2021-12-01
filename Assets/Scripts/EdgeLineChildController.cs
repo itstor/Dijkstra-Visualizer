@@ -7,15 +7,17 @@ public class EdgeLineChildController : MonoBehaviour
     private GameObject mArrowGameObject;
     private LineRenderer mEdgeLineRenderer;
 
-    void Start() {
+    void Awake() {
         mEdgeLineData = GetComponent<EdgeData>();
         mDistanceText = GetComponentInChildren<TMPro.TextMeshPro>();
+        mEdgeLineRenderer = GetComponent<LineRenderer>();
         mArrowGameObject = transform.Find("EdgeArrow").gameObject;    
 
         mDistanceText.text = mEdgeLineData.distance.ToString();
     }
 
     public void updateEdgeLinePosition(){
+        if (mEdgeLineRenderer == null) {Debug.Log("Null"); return;}
         Vector3 linePosition0 = mEdgeLineRenderer.GetPosition(0);
         Vector3 linePosition1 = mEdgeLineRenderer.GetPosition(1);
 

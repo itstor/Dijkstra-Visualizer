@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EdgeLineController : MonoBehaviour
@@ -8,17 +9,17 @@ public class EdgeLineController : MonoBehaviour
         line.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
     }
 
-    static public void updateMultipleEdgeLinePosition(Node node){
-        var edgeList = GraphManager.Instance.getEdgeList(node);
-
-        foreach (var edgeLine in edgeList.Item1)
+    static public void updateMultipleEdgeLinePosition((List<EdgeData>, List<EdgeData>) listOfEdge, Vector3 position){
+        Debug.Log("Incoming: " + listOfEdge.Item1.Count + " Outgoing: " + listOfEdge.Item2.Count);
+        
+        foreach (var edgeLine in listOfEdge.Item1)
         {
-            updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), node.transform.position, 1);
+            updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), position, index: 1);
         }
 
-        foreach (var edgeLine in edgeList.Item2)
+        foreach (var edgeLine in listOfEdge.Item2)
         {
-            updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), node.transform.position, 0);
+            updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), position, index: 0);
         }
     }
 }

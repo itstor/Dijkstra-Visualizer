@@ -36,8 +36,8 @@ public class GraphManager: MonoBehaviour
             mContainer.Add(to, (new List<EdgeData>(), new List<EdgeData>()));
         }
 
-        mContainer[from].Item1.Add(edge_data);
-        mContainer[to].Item2.Add(edge_data);
+        mContainer[from].Item2.Add(edge_data);
+        mContainer[to].Item1.Add(edge_data);
     }
 
     public void deleteNode(Node node){
@@ -60,6 +60,7 @@ public class GraphManager: MonoBehaviour
     public (List<EdgeData>, List<EdgeData>) getEdgeList(Node node){
         if (mContainer.ContainsKey(node))
         {
+            Debug.Log("Found node");
             return mContainer[node];
         }
 
