@@ -22,17 +22,28 @@ public class Node : MonoBehaviour
 
     /* check if this node already connected to the given node. If so, return true, otherwise false.
     This function is used to change the shape of edge line arrow */
-    public void checkTwoWayConnection(Node from){
+    public bool checkTwoWayConnection(Node from){
         if (connectedNodes.ContainsKey(from))
         {
             Debug.Log("Two Way");
             connectedNodes[from].isTwoWay = true;
+
+            return true;
         }
+        return false;
     }
 
     public void deleteNode(){
         GraphManager.Instance.deleteNode(this);
 
         Destroy(this.gameObject);
+    }
+
+    public EdgeData getEdgeData(Node node){
+        if (connectedNodes.ContainsKey(node))
+        {
+            return connectedNodes[node];
+        }
+        return null;
     }
 }

@@ -2,18 +2,31 @@ using UnityEngine;
 
 public class EdgeLineChildController : MonoBehaviour
 {
-    private EdgeData mEdgeLineData;
+    private EdgeData mEdgeData;
     private TMPro.TextMeshPro mDistanceText;
     private GameObject mArrowGameObject;
+    private SpriteRenderer mArrowSpriteRenderer;
     private LineRenderer mEdgeLineRenderer;
+    public Sprite singleArrowSprite;
+    public Sprite doubleArrowSprite;
 
     void Awake() {
-        mEdgeLineData = GetComponent<EdgeData>();
+        mEdgeData = GetComponent<EdgeData>();
         mDistanceText = GetComponentInChildren<TMPro.TextMeshPro>();
         mEdgeLineRenderer = GetComponent<LineRenderer>();
+        mArrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         mArrowGameObject = transform.Find("EdgeArrow").gameObject;    
 
-        mDistanceText.text = mEdgeLineData.distance.ToString();
+        mDistanceText.text = mEdgeData.distance.ToString();
+    }
+
+    void Update(){
+        if(mEdgeData.isTwoWay){
+            mArrowSpriteRenderer.sprite = doubleArrowSprite;
+        }
+        else{
+            mArrowSpriteRenderer.sprite = singleArrowSprite;
+        }
     }
 
     public void updateEdgeLinePosition(){
@@ -31,5 +44,5 @@ public class EdgeLineChildController : MonoBehaviour
         mDistanceText.transform.rotation = Quaternion.AngleAxis(angle + (90 < angle || angle < -90 ? 180 : 0), Vector3.forward);
     }
 
-    public void updateDistanceText() => mDistanceText.text = mEdgeLineData.distance.ToString();
+    public void updateDistanceText() => mDistanceText.text = mEdgeData.distance.ToString();
 }

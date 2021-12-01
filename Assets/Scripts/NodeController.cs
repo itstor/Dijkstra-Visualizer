@@ -27,7 +27,7 @@ public class NodeController : MonoBehaviour
                     break;
 
                 case states.CursorState.Connect:
-                    mCurrentActiveLine = EdgeLineFactory.Instance.createEdgeLine(gameObject.transform.position);
+                    mCurrentActiveLine = ObjectFactory.Instance.createEdgeLine(gameObject.transform.position);
                     mCurrentActiveLineRenderer = mCurrentActiveLine.GetComponent<LineRenderer>();
 
                     break;
@@ -85,7 +85,11 @@ public class NodeController : MonoBehaviour
                     mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
                     
                     if (mNode.connect(otherNode, edgeData)){
-                        otherNode.checkTwoWayConnection(mNode);   
+                        
+                         // TODO : dirty method. gonna find another method
+                        if(otherNode.checkTwoWayConnection(mNode)){
+                            mNode.getEdgeData(otherNode).GetComponent<EdgeData>().isTwoWay = true;
+                        }
                         GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
 
                         return;
