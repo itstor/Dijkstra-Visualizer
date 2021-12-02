@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] public string nodeName;
+    [SerializeField] public string nodeName{set;get;}
     public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
 
     // return true if the node is not already connected, false otherwise
@@ -46,4 +46,5 @@ public class Node : MonoBehaviour
         }
         return null;
     }
+
 }

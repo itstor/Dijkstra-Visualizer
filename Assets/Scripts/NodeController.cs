@@ -23,8 +23,7 @@ public class NodeController : MonoBehaviour
             {
                 case states.CursorState.Select:
                     mDragOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-                    AppManager.Instance.m_SelectedNode = this.gameObject;
-                    
+
                     break;
 
                 case states.CursorState.Connect:
@@ -35,6 +34,7 @@ public class NodeController : MonoBehaviour
                 default: break;
             }
         }
+        // Debug.Log("Mouse Down" + Input.GetMouseButton(1));
     }
 
     void OnMouseDrag()
@@ -104,7 +104,7 @@ public class NodeController : MonoBehaviour
 
     void OnMouseEnter()
     {
-        Debug.Log("Mouse enter");
+        // Debug.Log("Mouse enter");
         mNodeState.onHover();
     }
 
