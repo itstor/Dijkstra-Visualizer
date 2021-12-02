@@ -78,9 +78,13 @@ public class AppManager : MonoBehaviour
 
                     if (hit)
                     {
-                        Debug.Log("Hit " + hit.transform.gameObject.name);
                         if (hit.collider.gameObject.tag == "Node")
                         {
+                            if (m_SelectedNode != null)
+                            {
+                                m_SelectedNodeState.onIdle();
+                            }
+                            
                             m_SelectedNode = hit.collider.gameObject;
                             m_SelectedNodeState = m_SelectedNode.GetComponent<NodeState>();
                             m_SelectedNodeState.onSelected();
