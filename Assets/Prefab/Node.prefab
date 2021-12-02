@@ -320,7 +320,7 @@ MonoBehaviour:
   _endColor: {r: 0.6745098, g: 0.36078432, b: 0.8509804, a: 1}
   _visitedColor: {r: 1, g: 0.36078432, b: 0.36078432, a: 1}
   _selectedColor: {r: 1, g: 1, b: 1, a: 1}
-  _dragAddColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+  _dragAddColor: {r: 1, g: 1, b: 1, a: 1}
   _glowGameObject: {fileID: 7545308162304054408}
 --- !u!114 &4728188276884025491
 MonoBehaviour:
