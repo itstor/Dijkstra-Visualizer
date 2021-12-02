@@ -11,12 +11,12 @@ public class ToolsButtonGUI : MonoBehaviour
     }
 
     void Update() {
-        if (mCursorInstance.currentState == (states.CursorState)mToolType){
-            gameObject.GetComponent<Image>().color = Color.blue;
-        }
-        else{
-            gameObject.GetComponent<Image>().color = Color.white;
-        }
+        // if (mCursorInstance.currentState == (states.CursorState)mToolType){
+        //     gameObject.GetComponent<Image>().color = Color.blue;
+        // }
+        // else{
+        //     gameObject.GetComponent<Image>().color = Color.white;
+        // }
     }
     public void OnButtonSwitch()
     {
