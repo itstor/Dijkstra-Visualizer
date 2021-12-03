@@ -27,6 +27,7 @@ public class NodeState : MonoBehaviour
     private SpriteRenderer _glowSpriteRenderer;
     private SpriteRenderer _nodeSpriteRenderer;
     private bool _isHover;
+    private bool _forceGlow;
 
     void Awake()
     {
@@ -54,7 +55,7 @@ public class NodeState : MonoBehaviour
 
     private void onGlowUpdate()
     {
-        float newGlowScale = Mathf.SmoothStep(_glowGameObject.transform.localScale.x, (_isHover ? 1f : 0.5f), _glowAnimSpeed * Time.deltaTime);
+        float newGlowScale = Mathf.SmoothStep(_glowGameObject.transform.localScale.x, (_isHover || _forceGlow ? 1f : 0.5f), _glowAnimSpeed * Time.deltaTime);
 
         _glowGameObject.transform.localScale = new Vector3(newGlowScale, newGlowScale, newGlowScale);
     }
@@ -69,4 +70,5 @@ public class NodeState : MonoBehaviour
     public void onExitHover() => _isHover = false;
     public void onDragAdd() => _nodeCurrentColor = _dragAddColor;
     public void onEnd() => _nodeCurrentColor = _endColor;
+    public void toggleForceGlow() => _forceGlow = !_forceGlow;
 }

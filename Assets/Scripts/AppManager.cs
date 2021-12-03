@@ -83,11 +83,13 @@ public class AppManager : MonoBehaviour
                             if (m_SelectedNode != null)
                             {
                                 m_SelectedNodeState.onIdle();
+                                m_SelectedNodeState.toggleForceGlow();
                             }
                             
                             m_SelectedNode = hit.collider.gameObject;
                             m_SelectedNodeState = m_SelectedNode.GetComponent<NodeState>();
                             m_SelectedNodeState.onSelected();
+                            m_SelectedNodeState.toggleForceGlow();
                         }
                     }
                     else
@@ -95,8 +97,9 @@ public class AppManager : MonoBehaviour
                         if (m_SelectedNode != null)
                         {
                             m_SelectedNodeState.onIdle();
+                            m_SelectedNodeState.toggleForceGlow();
+                            m_SelectedNode = null;
                         }
-                        m_SelectedNode = null;
                     }
                 }
             }
