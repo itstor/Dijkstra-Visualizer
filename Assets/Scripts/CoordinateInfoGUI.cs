@@ -16,6 +16,6 @@ public class CoordinateInfoGUI : MonoBehaviour
     {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         
-        mCoordinateText.text = "X: " + Mathf.RoundToInt(mousePosition.x) + " Y: " + Mathf.RoundToInt(mousePosition.y);
+        mCoordinateText.text = "x: " + Mathf.RoundToInt(mousePosition.x) + " y: " + Mathf.RoundToInt(mousePosition.y);
     }
 }

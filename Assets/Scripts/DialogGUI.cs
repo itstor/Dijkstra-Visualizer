@@ -25,7 +25,7 @@ public class DialogGUI : MonoBehaviour
         
     }
 
-    public void displayDialog(int dialogIndex, Action<string, GameObject> callback, GameObject pass_gameObject)
+    public void showDialog(int dialogIndex, Action<string, GameObject> callback, GameObject pass_gameObject)
     {
         m_dialogIconImage.sprite = m_dialogIcon[dialogIndex];
         m_dialogTitleText.text = m_dialogTitle[dialogIndex];

@@ -5,7 +5,8 @@ using UnityEngine;
 public class GUIManager : MonoBehaviour
 {
     public static GUIManager Instance;
-    [SerializeField] public GameObject[] GUIScipts;
+    [SerializeField] private DialogGUI m_DialogGUI;
+    [SerializeField] private ToastGUI m_ToastGUI;
 
     void Awake()
     {
@@ -22,5 +23,15 @@ public class GUIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    public void showToast(string message, float duration){
+        m_ToastGUI.showToast(message, duration);
+    }
 
+    public void testToast(){
+        showToast("Test Toast", 2f);
+    }
+
+    public void tesToast2(){
+        showToast("Test Toast 2", 2f);
+    }
 }

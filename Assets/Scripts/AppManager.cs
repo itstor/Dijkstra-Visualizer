@@ -5,12 +5,29 @@ public class AppManager : MonoBehaviour
 {
 
     public static AppManager Instance = null;
-    private GameObject m_SelectedNode;
+    private GameObject m_newNode = null;
     private NodeState m_SelectedNodeState;
     private readonly Timer m_MouseClickTimer = new Timer();
-    private GameObject m_newNode = null;
     private NodeState m_newNodeState;
     [SerializeField] private DialogGUI dialogGUI;
+    public bool onSelectedChanged;
+    private GameObject m_SelectedNodeProperty;
+    public GameObject m_SelectedNode {
+        get {
+            return this.m_SelectedNodeProperty;
+        }
+
+        set {
+            if (this.m_SelectedNodeProperty != value){
+                onSelectedChanged = true;
+            }
+            else {
+                onSelectedChanged = false;
+            }
+
+            this.m_SelectedNodeProperty = value;
+        }
+    }
 
     void Awake()
     {
@@ -29,7 +46,7 @@ public class AppManager : MonoBehaviour
 
     void Start()
     {
-        m_MouseClickTimer.Interval = 500;
+        m_MouseClickTimer.Interval = 250;
         m_MouseClickTimer.Elapsed += singleClick;
     }
 
@@ -60,7 +77,7 @@ public class AppManager : MonoBehaviour
                 {
                     CursorStateManager.Instance.currentState = states.CursorState.Select;
                     m_newNode.GetComponent<NodeState>().onIdle();
-                    dialogGUI.displayDialog(0, (string name, GameObject node) =>
+                    dialogGUI.showDialog(0, (string name, GameObject node) =>
                     {
                         node.GetComponent<Node>().nodeName = name;
                     }, m_newNode);
@@ -118,6 +135,7 @@ public class AppManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Delete))
             {
+                GUIManager.Instance.showToast("Deleted " + m_SelectedNode.GetComponent<Node>().nodeName, 2f);
                 m_SelectedNode.GetComponent<Node>().deleteNode();
                 m_SelectedNode = null;
             }
