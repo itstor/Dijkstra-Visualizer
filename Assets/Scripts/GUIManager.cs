@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,11 +27,7 @@ public class GUIManager : MonoBehaviour
         m_ToastGUI.showToast(message, duration, hightPriority);
     }
 
-    public void testToast(){
-        showToast("Test Toast", 2f);
-    }
-
-    public void tesToast2(){
-        showToast("Test Toast 2", 2f);
+    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject){
+        m_DialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
     }
 }

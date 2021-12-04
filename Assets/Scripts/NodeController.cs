@@ -47,15 +47,16 @@ public class NodeController : MonoBehaviour
                     gameObject.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + mDragOffset;
 
                     EdgeLineController.updateMultipleEdgeLinePosition(GraphManager.Instance.getEdgeList(mNode), transform.position);
-                    
+
                     break;
 
                 case states.CursorState.Connect:
                     var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                     mNodeState.onHover();
                     EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, mousePosition, 1);
-                    
-                    if (mCurrentActiveLine.activeInHierarchy == false){
+
+                    if (mCurrentActiveLine.activeInHierarchy == false)
+                    {
                         mCurrentActiveLine.SetActive(true);
                     }
 
@@ -73,32 +74,51 @@ public class NodeController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
             mNodeState.onExitHover();
-
-            if (hit)
-            {
-                if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
-                {
-                    Vector3 objectPosition = hit.collider.gameObject.transform.position;
-                    var otherNode = hit.collider.gameObject.GetComponent<Node>();
-                    var edgeData = mCurrentActiveLine.GetComponent<EdgeData>();
-
-                    mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
-                    mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
-                    
-                    if (mNode.connect(otherNode, edgeData)){
-
-                         // TODO : dirty method. gonna find another method
-                        if (otherNode.checkTwoWayConnection(mNode)){
-                            mNode.getEdgeData(otherNode).GetComponent<EdgeData>().isTwoWay = true;
-                        }
-                        GraphManager.Instance.addEdgeLine(from: mNode, to: otherNode, edge_data: edgeData);
-
-                        return;
-                    }
-                }
-            }
             
-            Destroy(mCurrentActiveLine);
+            if (hit.collider == null){
+                Destroy(mCurrentActiveLine);
+                return;
+            }
+
+            if (hit.collider.gameObject.tag == "Node" && hit.collider.gameObject != gameObject)
+            {
+                Vector3 objectPosition = hit.collider.gameObject.transform.position;
+                var otherNode = hit.collider.gameObject.GetComponent<Node>();
+                var edgeData = mCurrentActiveLine.GetComponent<EdgeData>();
+
+                mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
+                mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
+
+                GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
+                {
+                    if (isInput)
+                    {
+                        Object["edgeData"].distance = int.Parse(distance);
+                        if (Object["mNode"].connect(Object["otherNode"], Object["edgeData"]))
+                        {
+
+                                // TODO : dirty method. gonna find another method
+                                if (Object["otherNode"].checkTwoWayConnection(Object["mNode"]))
+                            {
+                                Object["mNode"].getEdgeData(Object["otherNode"]).GetComponent<EdgeData>().isTwoWay = true;
+                            }
+                            GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
+                        }
+                    }
+                    else
+                    {
+                        Destroy(Object["edgeData"].gameObject);
+                    }
+                }, new Dictionary<string, dynamic> { 
+                    ["mNode"] = mNode,
+                    ["otherNode"] = otherNode,
+                    ["edgeData"] = edgeData
+                });
+            }
+            else
+            {
+                Destroy(mCurrentActiveLine);
+            }
         }
     }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,17 +16,11 @@ public class DialogGUI : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI m_inputHintText;
     [SerializeField] private TMPro.TMP_InputField m_inputField;
 
-    private Action<string, GameObject> m_callback;
-    private GameObject m_passGameObject;
+    private Action<string, bool, Dictionary<string, dynamic>> m_callback;
+    private Dictionary<string, dynamic> m_passGameObject;
     private bool m_isInputEntered;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void showDialog(int dialogIndex, Action<string, GameObject> callback, GameObject pass_gameObject)
+    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject)
     {
         m_dialogIconImage.sprite = m_dialogIcon[dialogIndex];
         m_dialogTitleText.text = m_dialogTitle[dialogIndex];
@@ -39,15 +34,13 @@ public class DialogGUI : MonoBehaviour
     public void storeData(){
         m_isInputEntered = true;
 
-        m_callback(m_inputField.text, m_passGameObject);
-        closeDialog();
+        m_callback(m_inputField.text, m_isInputEntered, m_passGameObject);
+        reset();
+        gameObject.SetActive(false);
     }
 
     public void closeDialog(){
-        if (!m_isInputEntered)
-        {
-            Destroy(m_passGameObject);
-        }
+        m_callback(m_inputField.text, m_isInputEntered, m_passGameObject);
         reset();
         gameObject.SetActive(false);
     }
@@ -57,10 +50,5 @@ public class DialogGUI : MonoBehaviour
         m_isInputEntered = false;
         m_callback = null;
         m_passGameObject = null;
-    }
-
-    public void Test()
-    {
-        throw new NotImplementedException();
     }
 }

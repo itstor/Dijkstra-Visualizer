@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Timers;
+using System.Collections.Generic;
 
 public class AppManager : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class AppManager : MonoBehaviour
     private NodeState m_SelectedNodeState;
     private readonly Timer m_MouseClickTimer = new Timer();
     private NodeState m_newNodeState;
-    [SerializeField] private DialogGUI dialogGUI;
     public bool onSelectedChanged;
     private GameObject m_SelectedNodeProperty;
     public GameObject m_SelectedNode {
@@ -77,10 +77,13 @@ public class AppManager : MonoBehaviour
                 {
                     CursorStateManager.Instance.currentState = states.CursorState.Select;
                     m_newNode.GetComponent<NodeState>().onIdle();
-                    dialogGUI.showDialog(0, (string name, GameObject node) =>
+                    GUIManager.Instance.showDialog(0, (string name, bool isInput, Dictionary<string, dynamic> node) =>
                     {
-                        node.GetComponent<Node>().nodeName = name;
-                    }, m_newNode);
+                        node["Node"].GetComponent<Node>().nodeName = name;
+                    }, new Dictionary<string, dynamic> { 
+                        ["Node"] = m_newNode
+                    });
+                    
                     m_newNode = null;
                 }
             }
