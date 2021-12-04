@@ -89,31 +89,36 @@ public class NodeController : MonoBehaviour
                 mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
                 mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
 
-                GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
+                // TODO : dirty method. gonna find another method
+                if (otherNode.checkTwoWayConnection(mNode))
                 {
-                    if (isInput)
+                    var otherEdgeData = otherNode.getEdgeData(mNode).GetComponent<EdgeData>();
+                    otherEdgeData.isTwoWay = true;
+                    mNode.connect(otherNode, otherEdgeData);
+                    GraphManager.Instance.addEdgeLine(from: otherNode, to: mNode, edge_data: otherEdgeData);
+                    Destroy(mCurrentActiveLine);
+                }
+                else {
+                    GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
                     {
-                        Object["edgeData"].distance = int.Parse(distance);
-                        if (Object["mNode"].connect(Object["otherNode"], Object["edgeData"]))
+                        if (isInput)
                         {
-
-                                // TODO : dirty method. gonna find another method
-                                if (Object["otherNode"].checkTwoWayConnection(Object["mNode"]))
+                            Object["edgeData"].distance = int.Parse(distance);
+                            if (Object["mNode"].connect(Object["otherNode"], Object["edgeData"]))
                             {
-                                Object["mNode"].getEdgeData(Object["otherNode"]).GetComponent<EdgeData>().isTwoWay = true;
+                                GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
                             }
-                            GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
                         }
-                    }
-                    else
-                    {
-                        Destroy(Object["edgeData"].gameObject);
-                    }
-                }, new Dictionary<string, dynamic> { 
-                    ["mNode"] = mNode,
-                    ["otherNode"] = otherNode,
-                    ["edgeData"] = edgeData
-                });
+                        else
+                        {
+                            Destroy(Object["edgeData"].gameObject);
+                        }
+                    }, new Dictionary<string, dynamic> { 
+                        ["mNode"] = mNode,
+                        ["otherNode"] = otherNode,
+                        ["edgeData"] = edgeData
+                    });
+                }
             }
             else
             {
