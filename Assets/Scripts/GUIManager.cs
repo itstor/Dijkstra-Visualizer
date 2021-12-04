@@ -23,8 +23,8 @@ public class GUIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void showToast(string message, float duration){
-        m_ToastGUI.showToast(message, duration);
+    public void showToast(string message, float duration, bool hightPriority = false){
+        m_ToastGUI.showToast(message, duration, hightPriority);
     }
 
     public void testToast(){

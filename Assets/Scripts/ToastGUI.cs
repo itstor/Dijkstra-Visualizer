@@ -54,8 +54,25 @@ public class ToastGUI : MonoBehaviour
         }
     }
 
-    public void showToast(string message, float duration){
+    public void showToast(string message, float duration, bool highPriority = false){
+        if (highPriority)
+        {
+            highPriotizedToast(message, duration);
+            return;
+        }
+
         m_ToastQueue.Enqueue((message,duration));
+    }
+
+    void highPriotizedToast(string message, float duration)
+    {
+        setToast(message, duration);
+        if (!m_IsShowing)
+        {
+            m_IsShowing = true;
+            m_time.Enabled = true;
+            m_time.Start();
+        }
     }
 
     public void setToast(string message, float duration)
