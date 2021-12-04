@@ -8,7 +8,8 @@ public class AppManager : MonoBehaviour
     private GameObject m_SelectedNode;
     private NodeState m_SelectedNodeState;
     private readonly Timer m_MouseClickTimer = new Timer();
-    private GameObject newNode = null;
+    private GameObject m_newNode = null;
+    private NodeState m_newNodeState;
     [SerializeField] private DialogGUI dialogGUI;
 
     void Awake()
@@ -36,26 +37,34 @@ public class AppManager : MonoBehaviour
     {
         if (CursorStateManager.Instance.currentState == states.CursorState.Add)
         {
-            if (newNode == null)
+            if (m_newNode == null)
             {
-                newNode = ObjectFactory.Instance.createNode(Utils.getMouseWorldPosition());
-                newNode.GetComponent<NodeState>().onDragAdd();
+                m_newNode = ObjectFactory.Instance.createNode(Utils.getMouseWorldPosition());
+                m_newNodeState = m_newNode.GetComponent<NodeState>();
+                m_newNodeState.onDragAdd();
+                
             }
 
-            if (newNode != null)
+            if (m_newNode != null)
             {
                 var mousePosition = Utils.getMouseWorldPosition();
-                newNode.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
+                m_newNode.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
 
-                if (Input.GetMouseButtonDown(0))
+                if (Input.GetKeyDown(KeyCode.Escape)){
+                    Destroy(m_newNode);
+                    CursorStateManager.Instance.currentState = states.CursorState.Select;
+                    m_newNode = null;
+                }
+                
+                else if (Input.GetMouseButtonDown(0))
                 {
                     CursorStateManager.Instance.currentState = states.CursorState.Select;
-                    newNode.GetComponent<NodeState>().onIdle();
+                    m_newNode.GetComponent<NodeState>().onIdle();
                     dialogGUI.displayDialog(0, (string name, GameObject node) =>
                     {
                         node.GetComponent<Node>().nodeName = name;
-                    }, newNode);
-                    newNode = null;
+                    }, m_newNode);
+                    m_newNode = null;
                 }
             }
         }

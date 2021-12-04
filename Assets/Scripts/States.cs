@@ -4,6 +4,7 @@ namespace states {
         Select,
         Connect,
         Add,
+        FindPath,
     }
 
     public enum ToolsType
@@ -11,5 +12,6 @@ namespace states {
         Select,
         Connect,
         Add,
+        FindPath,
     }
 }

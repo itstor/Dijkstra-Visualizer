@@ -20,19 +20,6 @@ public class ToolsButtonGUI : MonoBehaviour
     }
     public void OnButtonSwitch()
     {
-        switch (mToolType)
-        {
-            case states.ToolsType.Select:
-                mCursorInstance.currentState = states.CursorState.Select;
-                break;
-            case states.ToolsType.Connect:
-                mCursorInstance.currentState = states.CursorState.Connect;
-                break;
-            case states.ToolsType.Add:
-            {
-                mCursorInstance.currentState = states.CursorState.Add;
-            }
-                break;
-        }
+        mCursorInstance.currentState = (states.CursorState)mToolType;
     }
 }
