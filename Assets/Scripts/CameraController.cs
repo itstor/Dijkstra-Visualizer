@@ -5,6 +5,7 @@ public class CameraController : MonoBehaviour
     public float zoomSpeed, dragSpeed;
     public float smoothZoomValue;
     public float minZoom, maxZoom;
+    private float initialZoom;
 
     private float _targetZoomValue;
     private bool _isClicked = false;
@@ -15,6 +16,7 @@ public class CameraController : MonoBehaviour
     {
         _activeCamera = Camera.main;
         _targetZoomValue = _activeCamera.orthographicSize;
+        initialZoom = _activeCamera.orthographicSize;
     }
 
     void Update()
@@ -32,6 +34,7 @@ public class CameraController : MonoBehaviour
         {
             _targetZoomValue -= scroll * zoomSpeed;
             _targetZoomValue = Mathf.Clamp(_targetZoomValue, minZoom, maxZoom);
+            // Debug.Log(_targetZoomValue);
         }
 
         //get mouse position before zoom
@@ -39,6 +42,11 @@ public class CameraController : MonoBehaviour
 
         _activeCamera.orthographicSize = Mathf.Lerp(_activeCamera.orthographicSize, _targetZoomValue, smoothZoomValue);
 
+        if (Mathf.RoundToInt(_activeCamera.orthographicSize) != Mathf.RoundToInt(_targetZoomValue))
+        {
+            GUIManager.Instance.showToast($"Zoom {(Mathf.Round((maxZoom - _activeCamera.orthographicSize)/(maxZoom - initialZoom) * 100))}%", 2f, true);
+            Debug.Log("here");
+        }
         //get mouse position after zoom
         Vector3 mousePos2 = getMouseWorldPoint();
         
