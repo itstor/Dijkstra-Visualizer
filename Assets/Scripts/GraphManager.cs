@@ -41,16 +41,53 @@ public class GraphManager: MonoBehaviour
     }
 
     public void deleteNode(Node node){
+        Debug.Log("Deleting node " + node.nodeName);
         if (mContainer.ContainsKey(node))
         {
-            foreach (EdgeData line in mContainer[node].Item1)
+            // var item1Count = mContainer[node].Item1.Count;
+            // var item2Count = mContainer[node].Item2.Count;
+            // for (int i = 0; i < Mathf.Max(item1Count, item2Count); i++)
+            // {
+            //     if (i < item1Count)
+            //     {
+            //         if (mContainer[node].Item1[i] != null){
+            //             Destroy(mContainer[node].Item1[i].gameObject);
+            //         }
+            //         mContainer[node].Item1.RemoveAt(i);
+            //         item1Count--;
+            //     }
+                
+            //     if (i < item2Count)
+            //     {
+            //         if (mContainer[node].Item2[i] != null){
+            //             Destroy(mContainer[node].Item2[i].gameObject);
+            //         }
+            //         mContainer[node].Item2.RemoveAt(i);
+            //         item2Count--;
+            //     }
+            // }
+
+            foreach (EdgeData edge in mContainer[node].Item1)
             {
-                Destroy(line.gameObject);
+                if (edge != null)
+                {
+                    Destroy(edge.gameObject);
+                }
             }
 
-            foreach (EdgeData line in mContainer[node].Item2)
+            foreach (EdgeData edge in mContainer[node].Item2)
             {
-                Destroy(line.gameObject);
+                if (edge != null)
+                {
+                    Destroy(edge.gameObject);
+                }
+            }
+
+            foreach(Node n in mContainer.Keys){
+                if (n.connectedNodes.ContainsKey(node))
+                {
+                    n.connectedNodes.Remove(node);
+                }
             }
 
             mContainer.Remove(node);
