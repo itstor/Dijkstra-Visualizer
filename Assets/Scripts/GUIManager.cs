@@ -7,6 +7,7 @@ public class GUIManager : MonoBehaviour
     public static GUIManager Instance;
     [SerializeField] private DialogGUI m_DialogGUI;
     [SerializeField] private ToastGUI m_ToastGUI;
+    [SerializeField] private BlackBlockerGUI m_BlackBlockerGUI;
 
     void Awake()
     {
@@ -29,5 +30,12 @@ public class GUIManager : MonoBehaviour
 
     public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject){
         m_DialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
+    }
+
+    public void showBlocker(){
+        m_BlackBlockerGUI.show();
+    }
+    public void hideBlocker(){
+        m_BlackBlockerGUI.hide();
     }
 }
