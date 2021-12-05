@@ -45,7 +45,7 @@ public class CameraController : MonoBehaviour
         if (Mathf.RoundToInt(_activeCamera.orthographicSize) != Mathf.RoundToInt(_targetZoomValue))
         {
             GUIManager.Instance.showToast($"Zoom {(Mathf.Round((maxZoom - _activeCamera.orthographicSize)/(maxZoom - initialZoom) * 100))}%", 2f, true);
-            Debug.Log("here");
+            // Debug.Log("here");
         }
         //get mouse position after zoom
         Vector3 mousePos2 = getMouseWorldPoint();

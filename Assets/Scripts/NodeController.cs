@@ -52,7 +52,7 @@ public class NodeController : MonoBehaviour
 
                 case states.CursorState.Connect:
                     var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mNodeState.onHover();
+                    mNodeState.setHover();
                     EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, mousePosition, 1);
 
                     if (mCurrentActiveLine.activeInHierarchy == false)
@@ -73,7 +73,7 @@ public class NodeController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            mNodeState.onExitHover();
+            mNodeState.setExitHover();
             
             if (hit.collider == null){
                 Destroy(mCurrentActiveLine);
@@ -96,45 +96,40 @@ public class NodeController : MonoBehaviour
                     otherEdgeData.isTwoWay = true;
                     mNode.connect(otherNode, otherEdgeData);
                     GraphManager.Instance.addEdgeLine(from: otherNode, to: mNode, edge_data: otherEdgeData);
-                    Destroy(mCurrentActiveLine);
                 }
-                else {
+                else if (mNode.connect(otherNode, edgeData)) {
                     GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
                     {
                         if (isInput)
                         {
                             Object["edgeData"].distance = int.Parse(distance);
-                            if (Object["mNode"].connect(Object["otherNode"], Object["edgeData"]))
-                            {
-                                GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
-                            }
+                            GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
+                            GUIManager.Instance.showToast($"Connected {Object["mNode"].nodeName} to {Object["otherNode"].nodeName}", 2f);
+
+                            return;
                         }
-                        else
-                        {
-                            Destroy(Object["edgeData"].gameObject);
-                        }
+                        Destroy(Object["edgeData"].gameObject);
                     }, new Dictionary<string, dynamic> { 
                         ["mNode"] = mNode,
                         ["otherNode"] = otherNode,
                         ["edgeData"] = edgeData
                     });
+
+                    return;
                 }
             }
-            else
-            {
-                Destroy(mCurrentActiveLine);
-            }
+            Destroy(mCurrentActiveLine);
         }
     }
 
     void OnMouseEnter()
     {
         // Debug.Log("Mouse enter");
-        mNodeState.onHover();
+        mNodeState.setHover();
     }
 
     void OnMouseExit()
     {
-        mNodeState.onExitHover();
+        mNodeState.setExitHover();
     }
 }

@@ -6,6 +6,11 @@ public class Node : MonoBehaviour
 {
     [SerializeField] public string nodeName{set;get;}
     public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
+    public NodeState nodeState;
+
+    void Start(){
+        nodeState = GetComponent<NodeState>();
+    }
 
     // return true if the node is not already connected, false otherwise
     public bool connect(Node to, EdgeData edge_data)
@@ -25,7 +30,7 @@ public class Node : MonoBehaviour
     public bool checkTwoWayConnection(Node from){
         if (connectedNodes.ContainsKey(from))
         {
-            Debug.Log("Two Way");
+            // Debug.Log("Two Way");
             connectedNodes[from].isTwoWay = true;
 
             return true;

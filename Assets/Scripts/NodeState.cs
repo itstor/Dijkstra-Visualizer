@@ -26,6 +26,7 @@ public class NodeState : MonoBehaviour
     
     private SpriteRenderer _glowSpriteRenderer;
     private SpriteRenderer _nodeSpriteRenderer;
+    private Color previousColor;
     private bool _isHover;
     private bool _forceGlow;
 
@@ -60,15 +61,16 @@ public class NodeState : MonoBehaviour
         _glowGameObject.transform.localScale = new Vector3(newGlowScale, newGlowScale, newGlowScale);
     }
 
-    public void onIdle() => _nodeCurrentColor = _defaultColor;
-    public void onAccessed() => _nodeCurrentColor = _accessedColor;
-    public void onPath() => _nodeCurrentColor = _pathColor;
-    public void onStart() => _nodeCurrentColor = _pathColor;
-    public void onVisited() => _nodeCurrentColor = _visitedColor;
-    public void onSelected() => _nodeCurrentColor = _selectedColor;
-    public void onHover() => _isHover = true;
-    public void onExitHover() => _isHover = false;
-    public void onDragAdd() => _nodeCurrentColor = _dragAddColor;
-    public void onEnd() => _nodeCurrentColor = _endColor;
+    public void setIdle() { _nodeCurrentColor = _defaultColor;}
+    public void setAccessed() { _nodeCurrentColor = _accessedColor;}
+    public void setPath() { _nodeCurrentColor = _pathColor;}
+    public void setStart() { _nodeCurrentColor = _pathColor;}
+    public void setVisited() { _nodeCurrentColor = _visitedColor;}
+    public void setSelected() { _nodeCurrentColor = _selectedColor;}
+    public void setDragAdd() { _nodeCurrentColor = _dragAddColor;}
+    public void setEnd() { _nodeCurrentColor = _endColor;}
+    public void setBack() { _nodeCurrentColor = previousColor;}
+    public void setHover() => _isHover = true;
+    public void setExitHover() => _isHover = false;
     public void toggleForceGlow() => _forceGlow = !_forceGlow;
 }

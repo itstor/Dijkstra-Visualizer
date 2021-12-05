@@ -30,7 +30,7 @@ public class EdgeLineChildController : MonoBehaviour
     }
 
     public void updateEdgeLinePosition(){
-        if (mEdgeLineRenderer == null) {Debug.Log("Null"); return;}
+        if (mEdgeLineRenderer == null) { return;}
         Vector3 linePosition0 = mEdgeLineRenderer.GetPosition(0);
         Vector3 linePosition1 = mEdgeLineRenderer.GetPosition(1);
 

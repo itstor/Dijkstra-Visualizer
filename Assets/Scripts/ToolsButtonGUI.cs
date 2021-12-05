@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class ToolsButtonGUI : MonoBehaviour
 {
-    [SerializeField] private states.ToolsType mToolType;
+    [SerializeField] private states.ToolsType m_toolType;
     private CursorStateManager mCursorInstance;
 
     private void Start() {
@@ -20,6 +20,6 @@ public class ToolsButtonGUI : MonoBehaviour
     }
     public void OnButtonSwitch()
     {
-        mCursorInstance.currentState = (states.CursorState)mToolType;
+        mCursorInstance.currentState = (states.CursorState)m_toolType;
     }
 }

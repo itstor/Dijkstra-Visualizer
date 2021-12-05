@@ -38,7 +38,7 @@ public class ToastGUI : MonoBehaviour
 
         if (m_IsShowing)
         {
-            Debug.Log("Showing");
+            // Debug.Log("Showing");
             m_ToastText.color = Color.Lerp(m_ToastText.color, m_DefaultToastTextColor, m_fadeSpeed * Time.deltaTime);
             m_ToastBox.color = Color.Lerp(m_ToastBox.color, m_DefaultToastBoxColor, m_fadeSpeed * Time.deltaTime);
         }
@@ -57,14 +57,14 @@ public class ToastGUI : MonoBehaviour
     public void showToast(string message, float duration, bool highPriority = false){
         if (highPriority)
         {
-            highPriotizedToast(message, duration);
+            highPrioritizedToast(message, duration);
             return;
         }
 
         m_ToastQueue.Enqueue((message,duration));
     }
 
-    void highPriotizedToast(string message, float duration)
+    void highPrioritizedToast(string message, float duration)
     {
         setToast(message, duration);
         if (!m_IsShowing)
@@ -78,7 +78,7 @@ public class ToastGUI : MonoBehaviour
     public void setToast(string message, float duration)
     {
         var messageLenght = message.Length;
-        var toastLenght = messageLenght * 8f + m_Padding;
+        var toastLenght = messageLenght * 6f + m_Padding;
         m_ToastBox.rectTransform.sizeDelta = new Vector2(toastLenght, m_ToastBox.rectTransform.sizeDelta.y);
         m_ToastText.text = message;
         m_time.Interval = duration * 1000;
