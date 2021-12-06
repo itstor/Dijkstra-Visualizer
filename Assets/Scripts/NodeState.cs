@@ -73,4 +73,5 @@ public class NodeState : MonoBehaviour
     public void setHover() => _isHover = true;
     public void setExitHover() => _isHover = false;
     public void toggleForceGlow() => _forceGlow = !_forceGlow;
+    public void reset() {_nodeCurrentColor = _defaultColor; _isHover = false; _forceGlow = false;}
 }

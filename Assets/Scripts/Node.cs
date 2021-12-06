@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Node : MonoBehaviour
 {
-    [SerializeField] public string nodeName{set;get;}
+    [SerializeField] public string nodeName;
     public Dictionary<Node, EdgeData> connectedNodes =  new Dictionary<Node, EdgeData>();
     public NodeState nodeState;
 

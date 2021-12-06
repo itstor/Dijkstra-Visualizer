@@ -1,17 +1,21 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class Djikstra
 {
-    static public List<Node> FindShortestPath(Dictionary<Node, (List<EdgeData>, List<EdgeData>)> graph, Node start, Node end){
+    public bool m_isFinished = false;
+    public bool m_isRunning = false;
+    public IEnumerator<WaitForSeconds> FindShortestPath(Dictionary<Node, (List<EdgeData>, List<EdgeData>)> graph, Node start, Node end, float steps_delay){
         //Initialitation
         Dictionary<Node, float> distanceList = new Dictionary<Node, float>();
-        Dictionary<Node, List<Node>> previousList = new Dictionary<Node, List<Node>>();
+        Dictionary<Node, Node> previousList = new Dictionary<Node, Node>();
         List<Node> unvisitedList = new List<Node>();
         
         foreach(Node node in graph.Keys){
             distanceList.Add(node, float.MaxValue);
             unvisitedList.Add(node);
+            previousList.Add(node, null);
         }
 
         distanceList[start] = 0;
@@ -19,26 +23,57 @@ public class Djikstra
         while(unvisitedList.Count > 0){
             Node currentNode = GetNodeWithLowestDistance(distanceList, unvisitedList);
             unvisitedList.Remove(currentNode);
+            if (currentNode != end && currentNode != start){
+                currentNode.nodeState.setAccessed();
+            }
+
+            yield return new WaitForSeconds(steps_delay);
 
             if (currentNode == end){
-                // previousList[currentNode].Insert(0, start);
-                previousList[currentNode].Add(currentNode);
-                return previousList[currentNode];
+                Node currentTrack = currentNode;
+                currentTrack.nodeState.toggleForceGlow();
+
+                if (previousList[currentNode] != null){
+                    while(currentTrack != start){
+                        currentTrack = previousList[currentTrack];
+                        currentTrack.nodeState.setPath();
+                        currentTrack.nodeState.toggleForceGlow();
+                        
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                    GUIManager.Instance.showToast("Shortest path found!", 1.5f);
+                    GUIManager.Instance.showToast("Distance: " + distanceList[end], 1.5f);
+                    m_isFinished = true;
+                    m_isRunning = false;
+                    yield break;
+                }
+                
+                else {
+                    GUIManager.Instance.showToast("Path not found!", 1.5f);
+                    m_isFinished = true;
+                    m_isRunning = false;
+                }
             }
 
             foreach(Node neighbour in currentNode.connectedNodes.Keys){
                 float newDistance = distanceList[currentNode] + currentNode.connectedNodes[neighbour].distance;
                 if(newDistance < distanceList[neighbour]){
                     distanceList[neighbour] = newDistance;
-                    previousList[neighbour] = new List<Node>();
-                    previousList[neighbour].Add(currentNode);
+                    previousList[neighbour] = currentNode;
                 }
             }
+
+            if (currentNode != end && currentNode != start){
+                currentNode.nodeState.setVisited();
+            }
+
+            yield return new WaitForSeconds(steps_delay);
         }
-        return null;
+
+        yield break;
     }
 
-    static private Node GetNodeWithLowestDistance(Dictionary<Node, float> distanceList, List<Node> unvisitedList){
+    private Node GetNodeWithLowestDistance(Dictionary<Node, float> distanceList, List<Node> unvisitedList){
         Node currentNode = unvisitedList[0];
         float currentDistance = distanceList[currentNode];
 
@@ -50,5 +85,10 @@ public class Djikstra
         }
 
         return currentNode;
+    }
+
+    public void Reset(){
+        m_isFinished = false;
+        m_isRunning = false;
     }
 }
