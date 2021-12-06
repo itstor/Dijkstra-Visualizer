@@ -3,32 +3,32 @@ using System.Collections.Generic;
 
 public class NodeController : MonoBehaviour
 {
-    private Vector3 mDragOffset;
-    private NodeState mNodeState;
-    private GameObject mCurrentActiveLine;
-    private LineRenderer mCurrentActiveLineRenderer;
-    private Node mNode;
+    private Vector3 m_dragOffset;
+    private NodeState m_nodeState;
+    private GameObject m_currentActiveLine;
+    private LineRenderer m_currentActiveLineRenderer;
+    private Node m_node;
 
     void Start()
     {
-        mNodeState = GetComponent<NodeState>();
-        mNode = GetComponent<Node>();
+        m_nodeState = GetComponent<NodeState>();
+        m_node = GetComponent<Node>();
     }
 
     void OnMouseDown()
     {
         if (Input.GetMouseButton(0))
         {
-            switch (CursorStateManager.Instance.currentState)
+            switch (CursorStateManager.Instance.m_currentState)
             {
                 case states.CursorState.Select:
-                    mDragOffset = gameObject.transform.position - Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+                    m_dragOffset = gameObject.transform.position - Utils.getMouseWorldPosition();;
 
                     break;
 
                 case states.CursorState.Connect:
-                    mCurrentActiveLine = ObjectFactory.Instance.createEdgeLine(gameObject.transform.position);
-                    mCurrentActiveLineRenderer = mCurrentActiveLine.GetComponent<LineRenderer>();
+                    m_currentActiveLine = ObjectFactory.Instance.createEdgeLine(gameObject.transform.position);
+                    m_currentActiveLineRenderer = m_currentActiveLine.GetComponent<LineRenderer>();
 
                     break;
                 default: break;
@@ -41,23 +41,23 @@ public class NodeController : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            switch (CursorStateManager.Instance.currentState)
+            switch (CursorStateManager.Instance.m_currentState)
             {
                 case states.CursorState.Select:
-                    gameObject.transform.position = Camera.main.ScreenToWorldPoint(Input.mousePosition) + mDragOffset;
+                    gameObject.transform.position = Utils.getMouseWorldPosition() + m_dragOffset;
 
-                    EdgeLineController.updateMultipleEdgeLinePosition(GraphManager.Instance.getEdgeList(mNode), transform.position);
+                    EdgeLineController.updateMultipleEdgeLinePosition(GraphManager.Instance.getEdgeList(m_node), transform.position);
 
                     break;
 
                 case states.CursorState.Connect:
-                    var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    mNodeState.setHover();
-                    EdgeLineController.updateSingleEdgeLinePosition(mCurrentActiveLineRenderer, mousePosition, 1);
+                    var mousePosition = Utils.getMouseWorldPosition();
+                    m_nodeState.setHover();
+                    EdgeLineController.updateSingleEdgeLinePosition(m_currentActiveLineRenderer, mousePosition, 1);
 
-                    if (mCurrentActiveLine.activeInHierarchy == false)
+                    if (m_currentActiveLine.activeInHierarchy == false)
                     {
-                        mCurrentActiveLine.SetActive(true);
+                        m_currentActiveLine.SetActive(true);
                     }
 
                     break;
@@ -68,15 +68,15 @@ public class NodeController : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (CursorStateManager.Instance.currentState == states.CursorState.Connect)
+        if (CursorStateManager.Instance.m_currentState == states.CursorState.Connect)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            mNodeState.setExitHover();
+            m_nodeState.setExitHover();
             
             if (hit.collider == null){
-                Destroy(mCurrentActiveLine);
+                Destroy(m_currentActiveLine);
                 return;
             }
 
@@ -84,33 +84,34 @@ public class NodeController : MonoBehaviour
             {
                 Vector3 objectPosition = hit.collider.gameObject.transform.position;
                 var otherNode = hit.collider.gameObject.GetComponent<Node>();
-                var edgeData = mCurrentActiveLine.GetComponent<EdgeData>();
+                var edgeData = m_currentActiveLine.GetComponent<EdgeData>();
 
-                mCurrentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
-                mCurrentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
+                m_currentActiveLineRenderer.SetPosition(1, new Vector3(objectPosition.x, objectPosition.y, 0));
+                m_currentActiveLine.GetComponent<EdgeLineChildController>().updateEdgeLinePosition();
 
                 // TODO : dirty method. gonna find another method
-                if (otherNode.checkTwoWayConnection(mNode))
+                if (otherNode.checkTwoWayConnection(m_node))
                 {
-                    var otherEdgeData = otherNode.getEdgeData(mNode).GetComponent<EdgeData>();
-                    otherEdgeData.isTwoWay = true;
-                    mNode.connect(otherNode, otherEdgeData);
-                    GraphManager.Instance.addEdgeLine(from: otherNode, to: mNode, edge_data: otherEdgeData);
+                    var otherEdgeData = otherNode.getEdgeData(m_node).GetComponent<EdgeData>();
+                    otherEdgeData.m_isTwoWay = true;
+                    m_node.connect(otherNode, otherEdgeData);
+                    GraphManager.Instance.addEdgeLine(from: otherNode, to: m_node, edge_data: otherEdgeData);
                 }
-                else if (mNode.connect(otherNode, edgeData)) {
+                else if (m_node.allowConnect(otherNode)) {
                     GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
                     {
                         if (isInput)
                         {
-                            Object["edgeData"].distance = int.Parse(distance);
+                            Object["edgeData"].m_distance = int.Parse(distance);
                             GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
-                            GUIManager.Instance.showToast($"Connected {Object["mNode"].nodeName} to {Object["otherNode"].nodeName}", 2f);
+                            m_node.connect(Object["otherNode"], Object["edgeData"]);
+                            GUIManager.Instance.showToast($"Connected {Object["mNode"].m_nodeName} to {Object["otherNode"].m_nodeName}", 2f);
 
                             return;
                         }
                         Destroy(Object["edgeData"].gameObject);
                     }, new Dictionary<string, dynamic> { 
-                        ["mNode"] = mNode,
+                        ["mNode"] = m_node,
                         ["otherNode"] = otherNode,
                         ["edgeData"] = edgeData
                     });
@@ -118,18 +119,18 @@ public class NodeController : MonoBehaviour
                     return;
                 }
             }
-            Destroy(mCurrentActiveLine);
+            Destroy(m_currentActiveLine);
         }
     }
 
     void OnMouseEnter()
     {
         // Debug.Log("Mouse enter");
-        mNodeState.setHover();
+        m_nodeState.setHover();
     }
 
     void OnMouseExit()
     {
-        mNodeState.setExitHover();
+        m_nodeState.setExitHover();
     }
 }

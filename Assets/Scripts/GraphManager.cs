@@ -7,7 +7,7 @@ public class GraphManager: MonoBehaviour
     public static GraphManager Instance = null;
 
     // Node : (List of incoming edges, List of outgoing edges)
-    public Dictionary<Node, (List<EdgeData>, List<EdgeData>)> mContainer = new Dictionary<Node, (List<EdgeData>, List<EdgeData>)>();                         
+    public Dictionary<Node, (List<EdgeData>, List<EdgeData>)> m_graphContainer = new Dictionary<Node, (List<EdgeData>, List<EdgeData>)>();                         
 
     void Awake()
     {
@@ -26,23 +26,23 @@ public class GraphManager: MonoBehaviour
 
     public void addEdgeLine(Node from, Node to, EdgeData edge_data)
     {
-        if (!mContainer.ContainsKey(from))
+        if (!m_graphContainer.ContainsKey(from))
         {
-            mContainer.Add(from, (new List<EdgeData>(), new List<EdgeData>()));
+            m_graphContainer.Add(from, (new List<EdgeData>(), new List<EdgeData>()));
         }
 
-        if (!mContainer.ContainsKey(to))
+        if (!m_graphContainer.ContainsKey(to))
         {
-            mContainer.Add(to, (new List<EdgeData>(), new List<EdgeData>()));
+            m_graphContainer.Add(to, (new List<EdgeData>(), new List<EdgeData>()));
         }
 
-        mContainer[from].Item2.Add(edge_data);
-        mContainer[to].Item1.Add(edge_data);
+        m_graphContainer[from].Item2.Add(edge_data);
+        m_graphContainer[to].Item1.Add(edge_data);
     }
 
     public void deleteNode(Node node){
-        Debug.Log("Deleting node " + node.nodeName);
-        if (mContainer.ContainsKey(node))
+        Debug.Log("Deleting node " + node.m_nodeName);
+        if (m_graphContainer.ContainsKey(node))
         {
             // var item1Count = mContainer[node].Item1.Count;
             // var item2Count = mContainer[node].Item2.Count;
@@ -67,7 +67,7 @@ public class GraphManager: MonoBehaviour
             //     }
             // }
 
-            foreach (EdgeData edge in mContainer[node].Item1)
+            foreach (EdgeData edge in m_graphContainer[node].Item1)
             {
                 if (edge != null)
                 {
@@ -75,7 +75,7 @@ public class GraphManager: MonoBehaviour
                 }
             }
 
-            foreach (EdgeData edge in mContainer[node].Item2)
+            foreach (EdgeData edge in m_graphContainer[node].Item2)
             {
                 if (edge != null)
                 {
@@ -83,22 +83,22 @@ public class GraphManager: MonoBehaviour
                 }
             }
 
-            foreach(Node n in mContainer.Keys){
-                if (n.connectedNodes.ContainsKey(node))
+            foreach(Node n in m_graphContainer.Keys){
+                if (n.m_connectedNodes.ContainsKey(node))
                 {
-                    n.connectedNodes.Remove(node);
+                    n.m_connectedNodes.Remove(node);
                 }
             }
 
-            mContainer.Remove(node);
+            m_graphContainer.Remove(node);
         }
     }
 
     public (List<EdgeData>, List<EdgeData>) getEdgeList(Node node){
-        if (mContainer.ContainsKey(node))
+        if (m_graphContainer.ContainsKey(node))
         {
             Debug.Log("Found node");
-            return mContainer[node];
+            return m_graphContainer[node];
         }
 
         return (new List<EdgeData>(), new List<EdgeData>());

@@ -5,9 +5,9 @@ using UnityEngine;
 public class GUIManager : MonoBehaviour
 {
     public static GUIManager Instance;
-    [SerializeField] private DialogGUI m_DialogGUI;
-    [SerializeField] private ToastGUI m_ToastGUI;
-    [SerializeField] private BlackBlockerGUI m_BlackBlockerGUI;
+    [SerializeField] private DialogGUI m_dialogGUI;
+    [SerializeField] private ToastGUI m_toastGUI;
+    [SerializeField] private BlackBlockerGUI m_blackBlockerGUI;
 
     void Awake()
     {
@@ -25,17 +25,17 @@ public class GUIManager : MonoBehaviour
     }
 
     public void showToast(string message, float duration, bool hightPriority = false){
-        m_ToastGUI.showToast(message, duration, hightPriority);
+        m_toastGUI.showToast(message, duration, hightPriority);
     }
 
     public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject){
-        m_DialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
+        m_dialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
     }
 
     public void showBlocker(){
-        m_BlackBlockerGUI.show();
+        m_blackBlockerGUI.show();
     }
     public void hideBlocker(){
-        m_BlackBlockerGUI.hide();
+        m_blackBlockerGUI.hide();
     }
 }

@@ -3,23 +3,20 @@ using UnityEngine.UI;
 
 public class ToolsButtonGUI : MonoBehaviour
 {
+    [SerializeField] private Color m_selectedColor;
+    [SerializeField] private Color m_unselectedColor;
     [SerializeField] private states.ToolsType m_toolType;
-    private CursorStateManager mCursorInstance;
+    private CursorStateManager m_cursorInstance;
 
     private void Start() {
-        mCursorInstance = CursorStateManager.Instance;
+        m_cursorInstance = CursorStateManager.Instance;
     }
 
     void Update() {
-        // if (mCursorInstance.currentState == (states.CursorState)mToolType){
-        //     gameObject.GetComponent<Image>().color = Color.blue;
-        // }
-        // else{
-        //     gameObject.GetComponent<Image>().color = Color.white;
-        // }
+        gameObject.GetComponent<Image>().color = m_cursorInstance.m_currentState == (states.CursorState)m_toolType ? m_selectedColor : m_unselectedColor;
     }
     public void OnButtonSwitch()
     {
-        mCursorInstance.currentState = (states.CursorState)m_toolType;
+        m_cursorInstance.m_currentState = (states.CursorState)m_toolType;
     }
 }

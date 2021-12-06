@@ -157,8 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d15528e063b879478a7596968d51e9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  singleArrowSprite: {fileID: -5891750739389729392, guid: 6221661c9178c904b8e37cc6fcbaa315, type: 3}
-  doubleArrowSprite: {fileID: 8823053775718754497, guid: 6221661c9178c904b8e37cc6fcbaa315, type: 3}
+  m_singleArrowSprite: {fileID: -5891750739389729392, guid: 6221661c9178c904b8e37cc6fcbaa315, type: 3}
+  m_doubleArrowSprite: {fileID: 8823053775718754497, guid: 6221661c9178c904b8e37cc6fcbaa315, type: 3}
 --- !u!1 &7104686394656893187
 GameObject:
   m_ObjectHideFlags: 0

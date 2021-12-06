@@ -1,92 +1,84 @@
 using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 
 public class ToolsBoxGUI : MonoBehaviour
 {
-    [SerializeField] private GameObject m_NodeDetailSection;
-    [SerializeField] private TMPro.TextMeshProUGUI m_NodeNameText;
-    [SerializeField] private GameObject m_ConnectedNodesItemContainer;
-    [SerializeField] private GameObject m_ConnectedNodesTextPrefab;
+    [SerializeField] private GameObject m_nodeDetailSection;
+    [SerializeField] private TMPro.TextMeshProUGUI m_nodeNameText;
+    [SerializeField] private GameObject m_connectedNodesItemContainer;
+    [SerializeField] private GameObject m_connectedNodesTextPrefab;
 
-    [SerializeField] private GameObject m_FindPathSection;
-    [SerializeField] private TMPro.TextMeshProUGUI m_NodeFromText;
-    [SerializeField] private TMPro.TextMeshProUGUI m_NodeToText;
-    [SerializeField] private TMPro.TMP_InputField m_StepsDelayInputField;
-    [SerializeField] private GameObject m_StartButtonObject;
-    [SerializeField] private GameObject m_StopButtonObject;
-    [SerializeField] private GameObject m_ResetButtonObject;
-    [SerializeField] private Button m_StartButton;
+    [SerializeField] private GameObject m_findPathSection;
+    [SerializeField] private TMPro.TextMeshProUGUI m_nodeFromText;
+    [SerializeField] private TMPro.TextMeshProUGUI m_nodeToText;
+    [SerializeField] private TMPro.TextMeshProUGUI m_pathDistanceText;
+    [SerializeField] private TMPro.TMP_InputField m_stepsDelayInputField;
+    [SerializeField] private GameObject m_startButtonObject;
+    [SerializeField] private GameObject m_stopButtonObject;
+    [SerializeField] private GameObject m_resetButtonObject;
 
     void Update()
     {
-        if (CursorStateManager.Instance.currentState == states.CursorState.Select
-            && AppManager.Instance.m_SelectedNode != null)
+        if (CursorStateManager.Instance.m_currentState == states.CursorState.Select
+            && AppManager.Instance.m_selectedNode != null)
         {
-            if (AppManager.Instance.onSelectedChanged)
+            if (AppManager.Instance.m_onSelectedChanged)
             {
                 resetContentItems();
-                var selectedNode = AppManager.Instance.m_SelectedNode.GetComponent<Node>();
-                foreach (Node node in selectedNode.connectedNodes.Keys)
+                var selectedNode = AppManager.Instance.m_selectedNode.GetComponent<Node>();
+                foreach (Node node in selectedNode.m_connectedNodes.Keys)
                 {
-                    string nodeName = node.nodeName;
-                    GameObject nodeNameContainer = Instantiate(m_ConnectedNodesTextPrefab, m_ConnectedNodesItemContainer.transform);
+                    string nodeName = node.m_nodeName;
+                    GameObject nodeNameContainer = Instantiate(m_connectedNodesTextPrefab, m_connectedNodesItemContainer.transform);
                     var childrenText = nodeNameContainer.GetComponentsInChildren<TMPro.TextMeshProUGUI>();
 
                     childrenText[0].text = nodeName;
-                    childrenText[1].text = selectedNode.connectedNodes[node].distance.ToString();
-                    nodeNameContainer.transform.SetParent(m_ConnectedNodesItemContainer.transform);
+                    childrenText[1].text = selectedNode.m_connectedNodes[node].m_distance.ToString();
+                    nodeNameContainer.transform.SetParent(m_connectedNodesItemContainer.transform);
                 }
-                AppManager.Instance.onSelectedChanged = false;
+                AppManager.Instance.m_onSelectedChanged = false;
             }
 
-            m_NodeDetailSection.SetActive(true);
-            m_NodeNameText.text = AppManager.Instance.m_SelectedNode.GetComponent<Node>().nodeName;
+            m_nodeDetailSection.SetActive(true);
+            m_nodeNameText.text = AppManager.Instance.m_selectedNode.GetComponent<Node>().m_nodeName;
         }
         else
         {
-            m_NodeDetailSection.SetActive(false);
+            m_nodeDetailSection.SetActive(false);
         }
 
-        if (CursorStateManager.Instance.currentState == states.CursorState.FindPath)
+        if (CursorStateManager.Instance.m_currentState == states.CursorState.FindPath)
         {
+            m_findPathSection.SetActive(true);
+
             try {
-                m_NodeFromText.text = AppManager.Instance.m_SelectedStartNode.GetComponent<Node>().nodeName;
-                m_NodeToText.text = AppManager.Instance.m_SelectedEndNode.GetComponent<Node>().nodeName;
+                m_nodeFromText.text = AppManager.Instance.m_selectedStartNode.GetComponent<Node>().m_nodeName;
+                m_nodeToText.text = AppManager.Instance.m_selectedEndNode.GetComponent<Node>().m_nodeName;
             }
             catch {
-                m_NodeFromText.text = "";
-                m_NodeToText.text = "";
-            }
-            m_FindPathSection.SetActive(true);
-
-            if (PathFindingManager.Instance.isRunning()){
-                m_StartButtonObject.SetActive(false);
-                m_ResetButtonObject.SetActive(false);
-                m_StopButtonObject.SetActive(true);
-            }
-            else if (PathFindingManager.Instance.isFinished()){
-                m_StartButtonObject.SetActive(false);
-                m_ResetButtonObject.SetActive(true);
-                m_StopButtonObject.SetActive(false);
-            }
-            else{
-                m_StartButtonObject.SetActive(true);
-                m_StopButtonObject.SetActive(false);
-                m_ResetButtonObject.SetActive(false);
+                m_nodeFromText.text = "";
+                m_nodeToText.text = "";
             }
 
-            
+            m_pathDistanceText.text = PathfindingManager.Instance.m_results;
+
+            switch (PathfindingManager.Instance.m_TaskState)
+            {
+                case states.PFStates.Idle: showStartButton(); break;
+                case states.PFStates.Running: showStopButton(); break;
+                case states.PFStates.Finished: case states.PFStates.Stopped: showResetButton(); break;
+                default: break;
+            }
+
         }
         else
         {
-            m_FindPathSection.SetActive(false);
+            m_findPathSection.SetActive(false);
         }
     }
 
     private void resetContentItems()
     {
-        foreach (Transform child in m_ConnectedNodesItemContainer.transform)
+        foreach (Transform child in m_connectedNodesItemContainer.transform)
         {
             Destroy(child.gameObject);
         }
@@ -94,33 +86,53 @@ public class ToolsBoxGUI : MonoBehaviour
 
     public void startButton(){
         float stepsDelay;
-        if (m_StepsDelayInputField.text != ""){
-            stepsDelay = float.Parse(m_StepsDelayInputField.text)/1000;
+        if (m_stepsDelayInputField.text != ""){
+            stepsDelay = float.Parse(m_stepsDelayInputField.text)/1000f;
         }
         else {
             return;
         }
-        var selectedStartNode = AppManager.Instance.m_SelectedStartNode.GetComponent<Node>();
-        var selectedEndNode = AppManager.Instance.m_SelectedEndNode.GetComponent<Node>();
-        var graphContainer = GraphManager.Instance.mContainer;
+        var selectedStartNode = AppManager.Instance.m_selectedStartNode.GetComponent<Node>();
+        var selectedEndNode = AppManager.Instance.m_selectedEndNode.GetComponent<Node>();
+        var graphContainer = GraphManager.Instance.m_graphContainer;
         
-        PathFindingManager.Instance.registerTask(new DjikstraTask(selectedStartNode, selectedEndNode, stepsDelay, graphContainer));
+        PathfindingManager.Instance.registerTask(Djikstra.FindShortestPath(graphContainer, selectedStartNode, selectedEndNode, stepsDelay));
 
-        PathFindingManager.Instance.start();
+        PathfindingManager.Instance.start();
     }
 
     public void stopButton(){
-        PathFindingManager.Instance.stop();
+        PathfindingManager.Instance.stop();
     }
 
     public void resetButton(){
-        foreach(Node node in GraphManager.Instance.mContainer.Keys){
-            node.GetComponent<NodeState>().reset();
+        foreach(Node node in GraphManager.Instance.m_graphContainer.Keys){
+            node.m_nodeState.reset();
+            node.m_nodeState.hideStep();
         }
+        
+        PathfindingManager.Instance.m_TaskState = states.PFStates.Idle;
+        PathfindingManager.Instance.m_Coroutine = null;
+        PathfindingManager.Instance.m_results = "";
+        AppManager.Instance.m_selectedStartNode = null;
+        AppManager.Instance.m_selectedEndNode = null;
+    }
 
-        AppManager.Instance.m_SelectedStartNode = null;
-        AppManager.Instance.m_SelectedEndNode = null;
-        PathFindingManager.Instance.m_Djikstra.Reset();
+    private void showStartButton(){
+        m_startButtonObject.SetActive(true);
+        m_resetButtonObject.SetActive(false);
+        m_stopButtonObject.SetActive(false);
+    }
 
+    private void showStopButton(){
+        m_startButtonObject.SetActive(false);
+        m_resetButtonObject.SetActive(false);
+        m_stopButtonObject.SetActive(true);
+    }
+
+    private void showResetButton(){
+        m_startButtonObject.SetActive(false);
+        m_resetButtonObject.SetActive(true);
+        m_stopButtonObject.SetActive(false);
     }
 }

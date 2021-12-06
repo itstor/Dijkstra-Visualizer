@@ -2,47 +2,40 @@ using UnityEngine;
 
 public class EdgeLineChildController : MonoBehaviour
 {
-    private EdgeData mEdgeData;
-    private TMPro.TextMeshPro mDistanceText;
-    private GameObject mArrowGameObject;
-    private SpriteRenderer mArrowSpriteRenderer;
-    private LineRenderer mEdgeLineRenderer;
-    public Sprite singleArrowSprite;
-    public Sprite doubleArrowSprite;
+    private EdgeData m_edgeData;
+    private TMPro.TextMeshPro m_distanceText;
+    private GameObject m_arrowGameObject;
+    private SpriteRenderer m_arrowSpriteRenderer;
+    private LineRenderer m_edgeLineRenderer;
+    public Sprite m_singleArrowSprite;
+    public Sprite m_doubleArrowSprite;
 
     void Awake() {
-        mEdgeData = GetComponent<EdgeData>();
-        mDistanceText = GetComponentInChildren<TMPro.TextMeshPro>();
-        mEdgeLineRenderer = GetComponent<LineRenderer>();
-        mArrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        mArrowGameObject = transform.Find("EdgeArrow").gameObject;    
+        m_edgeData = GetComponent<EdgeData>();
+        m_distanceText = GetComponentInChildren<TMPro.TextMeshPro>();
+        m_edgeLineRenderer = GetComponent<LineRenderer>();
+        m_arrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        m_arrowGameObject = transform.Find("EdgeArrow").gameObject;    
 
-        mDistanceText.text = mEdgeData.distance.ToString();
+        m_distanceText.text = m_edgeData.m_distance.ToString();
     }
 
-    void Update(){
-        if(mEdgeData.isTwoWay){
-            mArrowSpriteRenderer.sprite = doubleArrowSprite;
-        }
-        else{
-            mArrowSpriteRenderer.sprite = singleArrowSprite;
-        }
-    }
+    public void updateTwoWay() => m_arrowSpriteRenderer.sprite = m_edgeData.m_isTwoWay ? m_doubleArrowSprite : m_singleArrowSprite;
 
     public void updateEdgeLinePosition(){
-        if (mEdgeLineRenderer == null) { return;}
-        Vector3 linePosition0 = mEdgeLineRenderer.GetPosition(0);
-        Vector3 linePosition1 = mEdgeLineRenderer.GetPosition(1);
+        if (m_edgeLineRenderer == null) { return;}
+        Vector3 linePosition0 = m_edgeLineRenderer.GetPosition(0);
+        Vector3 linePosition1 = m_edgeLineRenderer.GetPosition(1);
 
         Vector3 centerPosition = (linePosition0 + linePosition1) / 2;
         float angle = Mathf.Atan2(linePosition1.y - linePosition0.y, linePosition1.x - linePosition0.x) * Mathf.Rad2Deg;
 
-        mArrowGameObject.transform.position = centerPosition;
-        mArrowGameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        m_arrowGameObject.transform.position = centerPosition;
+        m_arrowGameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        mDistanceText.transform.position = centerPosition;
-        mDistanceText.transform.rotation = Quaternion.AngleAxis(angle + (90 < angle || angle < -90 ? 180 : 0), Vector3.forward);
+        m_distanceText.transform.position = centerPosition;
+        m_distanceText.transform.rotation = Quaternion.AngleAxis(angle + (90 < angle || angle < -90 ? 180 : 0), Vector3.forward);
     }
 
-    public void updateDistanceText() => mDistanceText.text = mEdgeData.distance.ToString();
+    public void updateDistanceText() => m_distanceText.text = m_edgeData.m_distance.ToString();
 }

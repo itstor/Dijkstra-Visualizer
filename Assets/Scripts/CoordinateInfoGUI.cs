@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class CoordinateInfoGUI : MonoBehaviour
 {
-    private TMPro.TextMeshProUGUI mCoordinateText;
+    private TMPro.TextMeshProUGUI m_coordinateText;
     // Start is called before the first frame update
     void Start()
     {
-        mCoordinateText = gameObject.GetComponent<TMPro.TextMeshProUGUI>();
+        m_coordinateText = gameObject.GetComponent<TMPro.TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePosition = Utils.getMouseWorldPosition();
         
-        mCoordinateText.text = "x: " + Mathf.RoundToInt(mousePosition.x) + " y: " + Mathf.RoundToInt(mousePosition.y);
+        m_coordinateText.text = "x: " + Mathf.RoundToInt(mousePosition.x) + " y: " + Mathf.RoundToInt(mousePosition.y);
     }
 }

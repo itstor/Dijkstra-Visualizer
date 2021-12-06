@@ -1,30 +1,12 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
-
-public struct DjikstraTask {
-    public Node start;
-    public Node end;
-    public float stepsDelay;
-    public Dictionary<Node, (List<EdgeData>, List<EdgeData>)> graph;
-
-    public DjikstraTask(Node start, Node end, float stepsDelay, Dictionary<Node, (List<EdgeData>, List<EdgeData>)> graph) {
-        this.start = start;
-        this.end = end;
-        this.stepsDelay = stepsDelay;
-        this.graph = graph;
-    }
-}
-
-public class PathFindingManager : MonoBehaviour {
+public class PathfindingManager : MonoBehaviour {
     
-    public static PathFindingManager Instance;
-    
+    public static PathfindingManager Instance;
     public IEnumerator m_Coroutine;
-
-    public Djikstra m_Djikstra = new Djikstra();
-    
+    public states.PFStates m_TaskState = states.PFStates.Idle;
+    public string m_results = "";
     void Awake()
     {
         if (Instance == null)
@@ -40,27 +22,19 @@ public class PathFindingManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void registerTask(DjikstraTask task)
+    public void registerTask(IEnumerator task)
     {
-        m_Coroutine = m_Djikstra.FindShortestPath(task.graph, task.start, task.end, task.stepsDelay);
+        m_Coroutine = task;
     }
 
     public void start(){
+        PathfindingManager.Instance.m_TaskState = states.PFStates.Running;
+
         StartCoroutine(m_Coroutine);
-        m_Djikstra.m_isRunning = true;
-        m_Djikstra.m_isFinished = false;
     }
 
     public void stop(){
+        m_TaskState = states.PFStates.Stopped;
         StopCoroutine(m_Coroutine);
-        m_Djikstra.m_isRunning = false;
-    }
-
-    public bool isRunning(){
-        return m_Djikstra.m_isRunning;
-    }
-
-    public bool isFinished(){
-        return m_Djikstra.m_isFinished;
     }
 }

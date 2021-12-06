@@ -7,7 +7,7 @@ public class CursorStateManager : MonoBehaviour
 {
 
     public static CursorStateManager Instance = null;
-    public states.CursorState currentState;
+    public states.CursorState m_currentState;
 
     void Awake()
     {

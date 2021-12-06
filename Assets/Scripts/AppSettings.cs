@@ -3,7 +3,7 @@ using UnityEngine;
 public class AppSettings : MonoBehaviour {
 
     public static AppSettings Instance = null;
-    public int targetFrameRate;                         
+    public int m_targetFrameRate;                         
 
     void Awake()
     {
@@ -18,7 +18,7 @@ public class AppSettings : MonoBehaviour {
         }
 
         QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = targetFrameRate;
+        Application.targetFrameRate = m_targetFrameRate;
 
         DontDestroyOnLoad(gameObject);
     }

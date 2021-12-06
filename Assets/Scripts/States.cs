@@ -1,4 +1,5 @@
-namespace states {
+public class states
+{
     public enum CursorState
     {
         Select,
@@ -13,5 +14,13 @@ namespace states {
         Connect,
         Add,
         FindPath,
+    }
+
+    public enum PFStates
+    {
+        Idle,
+        Running,
+        Stopped,
+        Finished,
     }
 }

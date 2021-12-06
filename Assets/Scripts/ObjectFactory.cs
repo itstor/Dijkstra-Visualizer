@@ -3,8 +3,8 @@ using UnityEngine;
 public class ObjectFactory: MonoBehaviour
 {
     public static ObjectFactory Instance = null;
-    [SerializeField] private GameObject edgeLinePrefab;
-    [SerializeField] private GameObject nodePrefab;
+    [SerializeField] private GameObject m_edgeLinePrefab;
+    [SerializeField] private GameObject m_nodePrefab;
 
     void Awake()
     {
@@ -22,7 +22,7 @@ public class ObjectFactory: MonoBehaviour
     }
 
     public GameObject createEdgeLine(Vector3 position){
-        var edgeLine = Instantiate(edgeLinePrefab, position, Quaternion.identity);
+        var edgeLine = Instantiate(m_edgeLinePrefab, position, Quaternion.identity);
 
         edgeLine.SetActive(false);
         
@@ -37,6 +37,6 @@ public class ObjectFactory: MonoBehaviour
     }
 
     public GameObject createNode(Vector3 position){
-        return Instantiate(nodePrefab, position, Quaternion.identity);
+        return Instantiate(m_nodePrefab, position, Quaternion.identity);
     }
 }
