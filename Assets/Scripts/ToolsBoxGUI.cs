@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class ToolsBoxGUI : MonoBehaviour
 {
@@ -86,15 +87,27 @@ public class ToolsBoxGUI : MonoBehaviour
 
     public void startButton(){
         float stepsDelay;
+        var graphContainer = GraphManager.Instance.m_graphContainer;
+        Node selectedStartNode = null;
+        Node selectedEndNode = null;
+
+        try {
+            selectedStartNode = AppManager.Instance.m_selectedStartNode.GetComponent<Node>();
+            selectedEndNode = AppManager.Instance.m_selectedEndNode.GetComponent<Node>();
+        }
+        catch {
+            GUIManager.Instance.showToast("Select a start and end node", 2f);
+            return;
+        }
+
+
         if (m_stepsDelayInputField.text != ""){
             stepsDelay = float.Parse(m_stepsDelayInputField.text)/1000f;
         }
         else {
+            GUIManager.Instance.showToast("Please enter a valid delay", 2f);
             return;
         }
-        var selectedStartNode = AppManager.Instance.m_selectedStartNode.GetComponent<Node>();
-        var selectedEndNode = AppManager.Instance.m_selectedEndNode.GetComponent<Node>();
-        var graphContainer = GraphManager.Instance.m_graphContainer;
         
         PathfindingManager.Instance.registerTask(Djikstra.FindShortestPath(graphContainer, selectedStartNode, selectedEndNode, stepsDelay));
 
