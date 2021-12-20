@@ -102,7 +102,7 @@ public class NodeController : MonoBehaviour
                     {
                         if (isInput)
                         {
-                            Object["edgeData"].m_distance = int.Parse(distance);
+                            Object["edgeData"].m_distance = float.Parse(distance);
                             GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
                             m_node.connect(Object["otherNode"], Object["edgeData"]);
                             GUIManager.Instance.showToast($"Connected {Object["mNode"].m_nodeName} to {Object["otherNode"].m_nodeName}", 2f);
