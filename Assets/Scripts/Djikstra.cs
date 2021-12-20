@@ -29,6 +29,7 @@ public class Djikstra
             unvisitedList.Remove(currentNode);
             if (currentNode != end && currentNode != start){
                 currentNode.m_nodeState.setAccessed();
+                currentNode.m_nodeState.toggleForceGlow();
             }
 
             yield return new WaitForSeconds(steps_delay);
@@ -80,6 +81,7 @@ public class Djikstra
             }
 
             if (currentNode != end && currentNode != start){
+                currentNode.m_nodeState.toggleForceGlow();
                 currentNode.m_nodeState.setVisited();
             }
 
