@@ -42,7 +42,7 @@ public class DialogGUI : MonoBehaviour
     public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject)
     {
         if (dialogIndex == 1){
-            m_inputField.contentType = TMPro.TMP_InputField.ContentType.IntegerNumber;
+            m_inputField.contentType = TMPro.TMP_InputField.ContentType.DecimalNumber;
         }
         else if (dialogIndex == 0){
             m_inputField.contentType = TMPro.TMP_InputField.ContentType.Standard;

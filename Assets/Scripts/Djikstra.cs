@@ -27,10 +27,13 @@ public class Djikstra
         while(unvisitedList.Count > 0){
             Node currentNode = GetNodeWithLowestDistance(distanceList, unvisitedList);
             unvisitedList.Remove(currentNode);
-            if (currentNode != end && currentNode != start){
-                currentNode.m_nodeState.setAccessed();
+            
+            if (currentNode != end){
+                currentNode.m_nodeState.toggleForceGlow();
+                if (currentNode != start){
+                    currentNode.m_nodeState.setAccessed();
+                }
             }
-            currentNode.m_nodeState.toggleForceGlow();
 
             yield return new WaitForSeconds(steps_delay);
 
