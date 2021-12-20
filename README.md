@@ -1,4 +1,4 @@
-# Djikstra-Visualizer
+# Dijkstra-Visualizer
 This project created as a part of Data Stucture and Algorithms.
 
 ## Project Demo
