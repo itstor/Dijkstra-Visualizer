@@ -22,6 +22,8 @@ public class NodeState : MonoBehaviour
     [SerializeField] private Color _visitedColor;
     [SerializeField] private Color _selectedColor;
     [SerializeField] private Color _dragAddColor;
+    [SerializeField] private Color _neighbourColor;
+    private Color _tempColor;
     [SerializeField] private GameObject _glowGameObject;
     
     private SpriteRenderer _glowSpriteRenderer;
@@ -72,6 +74,10 @@ public class NodeState : MonoBehaviour
     public void setDragAdd() => _nodeCurrentColor = _dragAddColor;
     public void setEnd() => _nodeCurrentColor = _endColor;
     public void setBack() => _nodeCurrentColor = previousColor;
+    public void setNeighbour() {
+        if (_nodeCurrentColor != _neighbourColor) _tempColor = _nodeCurrentColor;
+        _nodeCurrentColor = _nodeCurrentColor != _neighbourColor ? _neighbourColor : _tempColor;
+    }
     public void setHover() => _isHover = true;
     public void setExitHover() => _isHover = false;
     public void toggleForceGlow() => _forceGlow = !_forceGlow;

@@ -422,6 +422,7 @@ MonoBehaviour:
   _visitedColor: {r: 1, g: 0.36078432, b: 0.36078432, a: 1}
   _selectedColor: {r: 1, g: 1, b: 1, a: 1}
   _dragAddColor: {r: 1, g: 1, b: 1, a: 1}
+  _neighbourColor: {r: 0.99215686, g: 0.6745098, b: 0.25490198, a: 1}
   _glowGameObject: {fileID: 7545308162304054408}
 --- !u!114 &4728188276884025491
 MonoBehaviour:
