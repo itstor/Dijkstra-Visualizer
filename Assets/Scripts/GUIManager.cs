@@ -28,8 +28,8 @@ public class GUIManager : MonoBehaviour
         m_toastGUI.showToast(message, duration, hightPriority);
     }
 
-    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject){
-        m_dialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
+    public void showDialog(int dialogIndex, Action<string, bool, Vector2> callback){
+        m_dialogGUI.showDialog(dialogIndex, callback);
     }
 
     public void showBlocker(){

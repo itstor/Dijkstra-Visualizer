@@ -98,23 +98,12 @@ public class NodeController : MonoBehaviour
                     GraphManager.Instance.addEdgeLine(from: otherNode, to: m_node, edge_data: otherEdgeData);
                 }
                 else if (m_node.allowConnect(otherNode)) {
-                    GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
-                    {
-                        if (isInput)
-                        {
-                            Object["edgeData"].m_distance = float.Parse(distance);
-                            GraphManager.Instance.addEdgeLine(from: Object["mNode"], to: Object["otherNode"], edge_data: Object["edgeData"]);
-                            m_node.connect(Object["otherNode"], Object["edgeData"]);
-                            GUIManager.Instance.showToast($"Connected {Object["mNode"].m_nodeName} to {Object["otherNode"].m_nodeName}", 2f);
-
-                            return;
-                        }
-                        Destroy(Object["edgeData"].gameObject);
-                    }, new Dictionary<string, dynamic> { 
-                        ["mNode"] = m_node,
-                        ["otherNode"] = otherNode,
-                        ["edgeData"] = edgeData
-                    });
+                    edgeData.m_distance = Utils.calculateDistance2Point(transform.position, objectPosition);
+                    edgeData.m_fromPosition = transform.position;
+                    edgeData.m_toPosition = objectPosition;
+                    GraphManager.Instance.addEdgeLine(from: m_node, to: otherNode, edge_data: edgeData);
+                    m_node.connect(otherNode, edgeData);
+                    GUIManager.Instance.showToast($"Connected {m_node.m_nodeName} to {otherNode.m_nodeName}", 2f);
 
                     return;
                 }

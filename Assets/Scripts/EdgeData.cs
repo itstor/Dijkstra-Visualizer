@@ -4,6 +4,8 @@ public class EdgeData : MonoBehaviour
 {
     private float m_distanceProperty;
     private bool m_isTwoWayProperty;
+    [HideInInspector] public Vector3 m_fromPosition;
+    [HideInInspector] public Vector3 m_toPosition;
     public bool m_isTwoWay
     {
         get

@@ -14,10 +14,12 @@ public class DialogGUI : MonoBehaviour
     [SerializeField] private TMPro.TextMeshProUGUI m_dialogTitleText;
     [SerializeField] private TMPro.TextMeshProUGUI m_dialogDescriptionText;
     [SerializeField] private TMPro.TextMeshProUGUI m_inputHintText;
-    [SerializeField] private TMPro.TMP_InputField m_inputField;
+    [SerializeField] private TMPro.TMP_InputField m_nameInputField;
+    [SerializeField] private TMPro.TMP_InputField m_xInputField;
+    [SerializeField] private TMPro.TMP_InputField m_yInputField;
     private Vector3 m_defaultDialogPanelSize;
 
-    private Action<string, bool, Dictionary<string, dynamic>> m_callback;
+    private Action<string, bool, Vector2> m_callback;
     private Dictionary<string, dynamic> m_passGameObject;
     private bool m_isInputEntered;
     private bool m_isShowing = false;
@@ -29,8 +31,19 @@ public class DialogGUI : MonoBehaviour
     void Update(){
         if (m_isShowing){
             gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, new Vector3(1.1f,1.1f,0), Time.deltaTime * 10);
-            if (Input.GetKeyDown(KeyCode.Return) && m_inputField.text != ""){
+            if (Input.GetKeyDown(KeyCode.Return) && m_nameInputField.text != "" && m_xInputField.text != "" && m_yInputField.text != ""){
                 storeData();
+            }
+            if (Input.GetKeyDown(KeyCode.Tab)){
+                if (m_nameInputField.isFocused){
+                    m_xInputField.Select();
+                }
+                else if (m_xInputField.isFocused){
+                    m_yInputField.Select();
+                }
+                else if (m_yInputField.isFocused){
+                    m_nameInputField.Select();
+                }
             }
         }
 
@@ -39,41 +52,44 @@ public class DialogGUI : MonoBehaviour
         }
     }
 
-    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject)
+    public void showDialog(int dialogIndex, Action<string, bool, Vector2> callback)
     {
         if (dialogIndex == 1){
-            m_inputField.contentType = TMPro.TMP_InputField.ContentType.DecimalNumber;
+            m_nameInputField.contentType = TMPro.TMP_InputField.ContentType.DecimalNumber;
         }
         else if (dialogIndex == 0){
-            m_inputField.contentType = TMPro.TMP_InputField.ContentType.Standard;
+            m_nameInputField.contentType = TMPro.TMP_InputField.ContentType.Standard;
         }
         m_dialogIconImage.sprite = m_dialogIcon[dialogIndex];
         m_dialogTitleText.text = m_dialogTitle[dialogIndex];
         m_dialogDescriptionText.text = m_dialogDescription[dialogIndex];
         m_inputHintText.text = m_inputHint[dialogIndex];
         m_callback = callback;
-        m_passGameObject = pass_gameObject;
         m_isShowing = true;
-        m_inputField.Select();
-        m_inputField.ActivateInputField();
+        m_xInputField.Select();
+        m_xInputField.ActivateInputField();
         
         GUIManager.Instance.showBlocker();
     }
 
     public void storeData(){
         m_isInputEntered = true;
-        closeDialog();
+        m_callback(m_nameInputField.text, m_isInputEntered, new Vector2(float.Parse(m_xInputField.text), float.Parse(m_yInputField.text)));
+        GUIManager.Instance.hideBlocker();
+        m_isShowing = false;
+        reset();
     }
 
     public void closeDialog(){
-        m_callback(m_inputField.text, m_isInputEntered, m_passGameObject);
         GUIManager.Instance.hideBlocker();
         m_isShowing = false;
         reset();
     }
 
     private void reset(){
-        m_inputField.text = String.Empty;
+        m_nameInputField.text = String.Empty;
+        m_xInputField.text = String.Empty;
+        m_yInputField.text = String.Empty;
         m_isInputEntered = false;
         m_callback = null;
         m_passGameObject = null;
