@@ -36,7 +36,9 @@ public class ObjectFactory: MonoBehaviour
         return edgeLine;
     }
 
-    public GameObject createNode(Vector3 position){
-        return Instantiate(m_nodePrefab, position, Quaternion.identity);
+    public GameObject createNode(string name, Vector3 position){
+        var newNode = Instantiate(m_nodePrefab, position, Quaternion.identity);
+        newNode.GetComponent<Node>().m_nodeName = name;
+        return newNode;
     }
 }

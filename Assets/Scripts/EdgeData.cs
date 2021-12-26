@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class EdgeData : MonoBehaviour
 {
-    private int m_distanceProperty;
+    private float m_distanceProperty;
     private bool m_isTwoWayProperty;
+    [HideInInspector] public Vector3 m_fromPosition;
+    [HideInInspector] public Vector3 m_toPosition;
     public bool m_isTwoWay
     {
         get
@@ -16,7 +18,7 @@ public class EdgeData : MonoBehaviour
             GetComponent<EdgeLineChildController>().updateTwoWay();
         }
     }
-    public int m_distance
+    public float m_distance
     {
         get
         {

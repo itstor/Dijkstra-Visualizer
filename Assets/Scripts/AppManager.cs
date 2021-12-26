@@ -63,55 +63,16 @@ public class AppManager : MonoBehaviour
         //When cursorstate equal to NodeState.Add. Create new node
         if (CursorStateManager.Instance.m_currentState == states.CursorState.Add)
         {
-            //create new node when m_newnode is null
-            if (m_newNode == null)
+            CursorStateManager.Instance.m_currentState = states.CursorState.Select;
+            GUIManager.Instance.showDialog(0, (string name, bool isInput, Vector2 position) =>
             {
-                m_newNode = ObjectFactory.Instance.createNode(Utils.getMouseWorldPosition());
-                m_newNodeState = m_newNode.GetComponent<NodeState>();
-                m_newNodeState.setDragAdd();
-                m_newNodeState.toggleForceGlow();
-            }
-
-            //when new node is not null. drag it
-            if (m_newNode != null)
-            {
-                var mousePosition = Utils.getMouseWorldPosition();
-                m_newNode.transform.position = new Vector3(mousePosition.x, mousePosition.y, 0);
-
-                //you can cancel adding node by pressing escape
-                if (Input.GetKeyDown(KeyCode.Escape))
+                if (isInput)
                 {
-                    Destroy(m_newNode);
-                    CursorStateManager.Instance.m_currentState = states.CursorState.Select;
-                    m_newNode = null;
+                    var newNode = ObjectFactory.Instance.createNode(name, position);
+                    // newNode.GetComponent<Node>()
+                    GUIManager.Instance.showToast($"Added {newNode.GetComponent<Node>().m_nodeName}", 2f);
                 }
-
-                //when mouse is clicked. place node, change states to select and show dialog window
-                else if (Input.GetMouseButtonDown(0))
-                {
-                    CursorStateManager.Instance.m_currentState = states.CursorState.Select;
-                    GUIManager.Instance.showDialog(0, (string name, bool isInput, Dictionary<string, dynamic> Object) =>
-                    {
-                        if (isInput)
-                        {
-                            Object["m_newNode"].GetComponent<Node>().m_nodeName = name;
-                            Object["m_newNodeState"].toggleForceGlow();
-                            Object["m_newNodeState"].setIdle();
-                            GUIManager.Instance.showToast($"Added {Object["m_newNode"].GetComponent<Node>().m_nodeName}", 2f);
-                        }
-                        else
-                        {
-                            Destroy(Object["m_newNode"]);
-                        }
-                    }, new Dictionary<string, dynamic>
-                    {
-                        ["m_newNode"] = m_newNode,
-                        ["m_newNodeState"] = m_newNodeState
-                    });
-
-                    m_newNode = null;
-                }
-            }
+            });
         }
 
         //this code is for selecting node by double clicking on it

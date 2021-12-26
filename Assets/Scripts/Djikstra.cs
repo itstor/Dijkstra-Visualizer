@@ -27,9 +27,12 @@ public class Djikstra
         while(unvisitedList.Count > 0){
             Node currentNode = GetNodeWithLowestDistance(distanceList, unvisitedList);
             unvisitedList.Remove(currentNode);
-            if (currentNode != end && currentNode != start){
-                currentNode.m_nodeState.setAccessed();
+            
+            if (currentNode != end){
                 currentNode.m_nodeState.toggleForceGlow();
+                if (currentNode != start){
+                    currentNode.m_nodeState.setAccessed();
+                }
             }
 
             yield return new WaitForSeconds(steps_delay);
@@ -74,16 +77,29 @@ public class Djikstra
 
             foreach(Node neighbour in currentNode.m_connectedNodes.Keys){
                 float newDistance = distanceList[currentNode] + currentNode.m_connectedNodes[neighbour].m_distance;
+                
+                if (neighbour != end){
+                    neighbour.m_nodeState.setNeighbour();
+                }
+                neighbour.m_nodeState.toggleForceGlow();
+
+                yield return new WaitForSeconds(steps_delay);
+
                 if(newDistance < distanceList[neighbour]){
                     distanceList[neighbour] = newDistance;
                     previousList[neighbour] = currentNode;
                 }
+
+                if (neighbour != end){
+                    neighbour.m_nodeState.setNeighbour();
+                }
+                neighbour.m_nodeState.toggleForceGlow();
             }
 
             if (currentNode != end && currentNode != start){
-                currentNode.m_nodeState.toggleForceGlow();
                 currentNode.m_nodeState.setVisited();
             }
+            currentNode.m_nodeState.toggleForceGlow();
 
             yield return new WaitForSeconds(steps_delay);
         }

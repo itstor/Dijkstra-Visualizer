@@ -17,6 +17,8 @@ public class EdgeLineController : MonoBehaviour
             if (edgeLine != null)
             {
                 updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), position, 1);
+                edgeLine.m_distance = Utils.calculateDistance2Point(edgeLine.m_fromPosition, position);
+                edgeLine.m_toPosition = position;
             }
         }
 
@@ -25,6 +27,8 @@ public class EdgeLineController : MonoBehaviour
             if (edgeLine != null)
             {
                 updateSingleEdgeLinePosition(edgeLine.gameObject.GetComponent<LineRenderer>(), position, 0);
+                edgeLine.m_distance = Utils.calculateDistance2Point(position, edgeLine.m_toPosition);
+                edgeLine.m_fromPosition = position;
             }
         }
     }
