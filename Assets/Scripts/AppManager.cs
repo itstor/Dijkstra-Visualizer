@@ -69,7 +69,7 @@ public class AppManager : MonoBehaviour
                 if (isInput)
                 {
                     var newNode = ObjectFactory.Instance.createNode(name, position);
-                    // newNode.GetComponent<Node>()
+                    newNode.GetComponent<Node>().m_nodeState.reset();
                     GUIManager.Instance.showToast($"Added {newNode.GetComponent<Node>().m_nodeName}", 2f);
                 }
             });

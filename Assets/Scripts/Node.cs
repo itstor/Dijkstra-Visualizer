@@ -18,7 +18,7 @@ public class Node : MonoBehaviour
     }
 
 
-    void Start(){
+    void Awake(){
         m_nodeState = GetComponent<NodeState>();
     }
 
