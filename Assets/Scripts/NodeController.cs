@@ -22,7 +22,7 @@ public class NodeController : MonoBehaviour
             switch (CursorStateManager.Instance.m_currentState)
             {
                 case states.CursorState.Select:
-                    m_dragOffset = gameObject.transform.position - Utils.getMouseWorldPosition();;
+                    m_dragOffset = gameObject.transform.position - Utils.getMouseWorldPosition(); ;
 
                     break;
 
@@ -74,8 +74,9 @@ public class NodeController : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
             m_nodeState.setExitHover();
-            
-            if (hit.collider == null){
+
+            if (hit.collider == null)
+            {
                 Destroy(m_currentActiveLine);
                 return;
             }
@@ -97,7 +98,8 @@ public class NodeController : MonoBehaviour
                     m_node.connect(otherNode, otherEdgeData);
                     GraphManager.Instance.addEdgeLine(from: otherNode, to: m_node, edge_data: otherEdgeData);
                 }
-                else if (m_node.allowConnect(otherNode)) {
+                else if (m_node.allowConnect(otherNode))
+                {
                     GUIManager.Instance.showDialog(1, (string distance, bool isInput, Dictionary<string, dynamic> Object) =>
                     {
                         if (isInput)
@@ -110,7 +112,8 @@ public class NodeController : MonoBehaviour
                             return;
                         }
                         Destroy(Object["edgeData"].gameObject);
-                    }, new Dictionary<string, dynamic> { 
+                    }, new Dictionary<string, dynamic>
+                    {
                         ["mNode"] = m_node,
                         ["otherNode"] = otherNode,
                         ["edgeData"] = edgeData
