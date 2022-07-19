@@ -203,7 +203,7 @@ public class AppManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(button_index))
         {
-            if (m_mouseClickTimer.Enabled == false)
+            if (!m_mouseClickTimer.Enabled)
             {
                 onSingleClick();
                 m_mouseClickTimer.Start();

@@ -55,7 +55,7 @@ public class NodeController : MonoBehaviour
                     m_nodeState.setHover();
                     EdgeLineController.updateSingleEdgeLinePosition(m_currentActiveLineRenderer, mousePosition, 1);
 
-                    if (m_currentActiveLine.activeInHierarchy == false)
+                    if (!m_currentActiveLine.activeInHierarchy)
                     {
                         m_currentActiveLine.SetActive(true);
                     }
