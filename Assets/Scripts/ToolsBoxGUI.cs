@@ -51,11 +51,13 @@ public class ToolsBoxGUI : MonoBehaviour
         {
             m_findPathSection.SetActive(true);
 
-            try {
+            try
+            {
                 m_nodeFromText.text = AppManager.Instance.m_selectedStartNode.GetComponent<Node>().m_nodeName;
                 m_nodeToText.text = AppManager.Instance.m_selectedEndNode.GetComponent<Node>().m_nodeName;
             }
-            catch {
+            catch
+            {
                 m_nodeFromText.text = "";
                 m_nodeToText.text = "";
             }
@@ -85,45 +87,53 @@ public class ToolsBoxGUI : MonoBehaviour
         }
     }
 
-    public void startButton(){
+    public void startButton()
+    {
         float stepsDelay;
         var graphContainer = GraphManager.Instance.m_graphContainer;
         Node selectedStartNode = null;
         Node selectedEndNode = null;
 
-        try {
+        try
+        {
             selectedStartNode = AppManager.Instance.m_selectedStartNode.GetComponent<Node>();
             selectedEndNode = AppManager.Instance.m_selectedEndNode.GetComponent<Node>();
         }
-        catch {
+        catch
+        {
             GUIManager.Instance.showToast("Select a start and end node", 2f);
             return;
         }
 
 
-        if (m_stepsDelayInputField.text != ""){
-            stepsDelay = float.Parse(m_stepsDelayInputField.text)/1000f;
+        if (!string.IsNullOrEmpty(m_stepsDelayInputField.text))
+        {
+            stepsDelay = float.Parse(m_stepsDelayInputField.text) / 1000f;
         }
-        else {
+        else
+        {
             GUIManager.Instance.showToast("Please enter a valid delay", 2f);
             return;
         }
-        
+
         PathfindingManager.Instance.registerTask(Djikstra.FindShortestPath(graphContainer, selectedStartNode, selectedEndNode, stepsDelay));
 
         PathfindingManager.Instance.start();
     }
 
-    public void stopButton(){
+    public void stopButton()
+    {
         PathfindingManager.Instance.stop();
     }
 
-    public void resetButton(){
-        foreach(Node node in GraphManager.Instance.m_graphContainer.Keys){
+    public void resetButton()
+    {
+        foreach (Node node in GraphManager.Instance.m_graphContainer.Keys)
+        {
             node.m_nodeState.reset();
             node.m_nodeState.hideStep();
         }
-        
+
         PathfindingManager.Instance.m_TaskState = states.PFStates.Idle;
         PathfindingManager.Instance.m_Coroutine = null;
         PathfindingManager.Instance.m_results = "";
@@ -131,19 +141,22 @@ public class ToolsBoxGUI : MonoBehaviour
         AppManager.Instance.m_selectedEndNode = null;
     }
 
-    private void showStartButton(){
+    private void showStartButton()
+    {
         m_startButtonObject.SetActive(true);
         m_resetButtonObject.SetActive(false);
         m_stopButtonObject.SetActive(false);
     }
 
-    private void showStopButton(){
+    private void showStopButton()
+    {
         m_startButtonObject.SetActive(false);
         m_resetButtonObject.SetActive(false);
         m_stopButtonObject.SetActive(true);
     }
 
-    private void showResetButton(){
+    private void showResetButton()
+    {
         m_startButtonObject.SetActive(false);
         m_resetButtonObject.SetActive(true);
         m_stopButtonObject.SetActive(false);

@@ -13,7 +13,7 @@ public class NodeTextController : MonoBehaviour
 
     void Update()
     {
-        if (m_stepTextMesh.text != "")
+        if (!string.IsNullOrEmpty(m_stepTextMesh.text))
         {
             m_stepTextMesh.color = Color.Lerp(m_stepTextMesh.color, Color.white, Time.deltaTime * m_fadeSpeed);
         }
