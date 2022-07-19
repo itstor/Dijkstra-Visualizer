@@ -106,7 +106,8 @@ public class ToolsBoxGUI : MonoBehaviour
         }
 
 
-        if (m_stepsDelayInputField.text != "")
+
+        if (!string.IsNullOrEmpty(m_stepsDelayInputField.text))
         {
             stepsDelay = float.Parse(m_stepsDelayInputField.text) / 1000f;
         }
