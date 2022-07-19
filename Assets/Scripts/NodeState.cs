@@ -25,7 +25,7 @@ public class NodeState : MonoBehaviour
     [SerializeField] private Color _neighbourColor;
     private Color _tempColor;
     [SerializeField] private GameObject _glowGameObject;
-    
+
     private SpriteRenderer _glowSpriteRenderer;
     private SpriteRenderer _nodeSpriteRenderer;
     private NodeTextController m_nodeTextController;
@@ -74,7 +74,8 @@ public class NodeState : MonoBehaviour
     public void setDragAdd() => _nodeCurrentColor = _dragAddColor;
     public void setEnd() => _nodeCurrentColor = _endColor;
     public void setBack() => _nodeCurrentColor = previousColor;
-    public void setNeighbour() {
+    public void setNeighbour()
+    {
         if (_nodeCurrentColor != _neighbourColor) _tempColor = _nodeCurrentColor;
         _nodeCurrentColor = _nodeCurrentColor != _neighbourColor ? _neighbourColor : _tempColor;
     }
@@ -83,5 +84,5 @@ public class NodeState : MonoBehaviour
     public void toggleForceGlow() => _forceGlow = !_forceGlow;
     public void showStep(int step) => m_nodeTextController.showNodeStep(step);
     public void hideStep() => m_nodeTextController.hideNodeStep();
-    public void reset() {_nodeCurrentColor = _defaultColor; _isHover = false; _forceGlow = false;}
+    public void reset() { _nodeCurrentColor = _defaultColor; _isHover = false; _forceGlow = false; }
 }

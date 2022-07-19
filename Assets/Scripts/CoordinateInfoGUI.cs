@@ -15,7 +15,7 @@ public class CoordinateInfoGUI : MonoBehaviour
     void Update()
     {
         Vector2 mousePosition = Utils.getMouseWorldPosition();
-        
+
         m_coordinateText.text = "x: " + Mathf.RoundToInt(mousePosition.x) + " y: " + Mathf.RoundToInt(mousePosition.y);
     }
 }

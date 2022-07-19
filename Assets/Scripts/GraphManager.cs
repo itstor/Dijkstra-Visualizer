@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GraphManager: MonoBehaviour
+public class GraphManager : MonoBehaviour
 {
     public static GraphManager Instance = null;
 
     // Node : (List of incoming edges, List of outgoing edges)
-    public Dictionary<Node, (List<EdgeData>, List<EdgeData>)> m_graphContainer = new Dictionary<Node, (List<EdgeData>, List<EdgeData>)>();                         
+    public Dictionary<Node, (List<EdgeData>, List<EdgeData>)> m_graphContainer = new Dictionary<Node, (List<EdgeData>, List<EdgeData>)>();
 
     void Awake()
     {
@@ -40,7 +40,8 @@ public class GraphManager: MonoBehaviour
         m_graphContainer[to].Item1.Add(edge_data);
     }
 
-    public void deleteNode(Node node){
+    public void deleteNode(Node node)
+    {
         Debug.Log("Deleting node " + node.m_nodeName);
         if (m_graphContainer.ContainsKey(node))
         {
@@ -56,7 +57,7 @@ public class GraphManager: MonoBehaviour
             //         mContainer[node].Item1.RemoveAt(i);
             //         item1Count--;
             //     }
-                
+
             //     if (i < item2Count)
             //     {
             //         if (mContainer[node].Item2[i] != null){
@@ -83,7 +84,8 @@ public class GraphManager: MonoBehaviour
                 }
             }
 
-            foreach(Node n in m_graphContainer.Keys){
+            foreach (Node n in m_graphContainer.Keys)
+            {
                 if (n.m_connectedNodes.ContainsKey(node))
                 {
                     n.m_connectedNodes.Remove(node);
@@ -94,7 +96,8 @@ public class GraphManager: MonoBehaviour
         }
     }
 
-    public (List<EdgeData>, List<EdgeData>) getEdgeList(Node node){
+    public (List<EdgeData>, List<EdgeData>) getEdgeList(Node node)
+    {
         if (m_graphContainer.ContainsKey(node))
         {
             Debug.Log("Found node");

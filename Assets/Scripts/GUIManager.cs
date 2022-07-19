@@ -24,18 +24,22 @@ public class GUIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void showToast(string message, float duration, bool hightPriority = false){
+    public void showToast(string message, float duration, bool hightPriority = false)
+    {
         m_toastGUI.showToast(message, duration, hightPriority);
     }
 
-    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject){
+    public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject)
+    {
         m_dialogGUI.showDialog(dialogIndex, callback, pass_gameObject);
     }
 
-    public void showBlocker(){
+    public void showBlocker()
+    {
         m_blackBlockerGUI.show();
     }
-    public void hideBlocker(){
+    public void hideBlocker()
+    {
         m_blackBlockerGUI.hide();
     }
 }

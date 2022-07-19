@@ -10,20 +10,22 @@ public class EdgeLineChildController : MonoBehaviour
     public Sprite m_singleArrowSprite;
     public Sprite m_doubleArrowSprite;
 
-    void Awake() {
+    void Awake()
+    {
         m_edgeData = GetComponent<EdgeData>();
         m_distanceText = GetComponentInChildren<TMPro.TextMeshPro>();
         m_edgeLineRenderer = GetComponent<LineRenderer>();
         m_arrowSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        m_arrowGameObject = transform.Find("EdgeArrow").gameObject;    
+        m_arrowGameObject = transform.Find("EdgeArrow").gameObject;
 
         m_distanceText.text = m_edgeData.m_distance.ToString();
     }
 
     public void updateTwoWay() => m_arrowSpriteRenderer.sprite = m_edgeData.m_isTwoWay ? m_doubleArrowSprite : m_singleArrowSprite;
 
-    public void updateEdgeLinePosition(){
-        if (m_edgeLineRenderer == null) { return;}
+    public void updateEdgeLinePosition()
+    {
+        if (m_edgeLineRenderer == null) { return; }
         Vector3 linePosition0 = m_edgeLineRenderer.GetPosition(0);
         Vector3 linePosition1 = m_edgeLineRenderer.GetPosition(1);
 

@@ -44,12 +44,12 @@ public class CameraController : MonoBehaviour
 
         if (Mathf.RoundToInt(m_activeCamera.orthographicSize) != Mathf.RoundToInt(m_targetZoomValue))
         {
-            GUIManager.Instance.showToast($"Zoom {(Mathf.Round((m_maxZoom - m_activeCamera.orthographicSize)/(m_maxZoom - m_initialZoom) * 100))}%", 2f, true);
+            GUIManager.Instance.showToast($"Zoom {(Mathf.Round((m_maxZoom - m_activeCamera.orthographicSize) / (m_maxZoom - m_initialZoom) * 100))}%", 2f, true);
             // Debug.Log("here");
         }
         //get mouse position after zoom
         Vector3 mousePos2 = Utils.getMouseWorldPosition();
-        
+
         Vector3 mousePositionDiff = mousePos1 - mousePos2;
 
         Vector3 targetPos = m_activeCamera.transform.position + mousePositionDiff;

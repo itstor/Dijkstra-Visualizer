@@ -32,7 +32,8 @@ public class BlackBlockerGUI : MonoBehaviour
         m_isActive = true;
     }
 
-    public void hide(){
+    public void hide()
+    {
         m_blackBlocker.raycastTarget = false;
         m_isActive = false;
     }
