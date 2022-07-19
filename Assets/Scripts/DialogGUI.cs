@@ -22,29 +22,36 @@ public class DialogGUI : MonoBehaviour
     private bool m_isInputEntered;
     private bool m_isShowing = false;
 
-    void Start(){
+    void Start()
+    {
         m_defaultDialogPanelSize = gameObject.transform.localScale;
     }
 
-    void Update(){
-        if (m_isShowing){
-            gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, new Vector3(1.1f,1.1f,0), Time.deltaTime * 10);
-            if (Input.GetKeyDown(KeyCode.Return) && m_inputField.text != ""){
+    void Update()
+    {
+        if (m_isShowing)
+        {
+            gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, new Vector3(1.1f, 1.1f, 0), Time.deltaTime * 10);
+            if (Input.GetKeyDown(KeyCode.Return) && m_inputField.text != "")
+            {
                 storeData();
             }
         }
 
-        else {
-            gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, new Vector3(0f,0f,0f), Time.deltaTime * 10);
+        else
+        {
+            gameObject.transform.localScale = Vector3.Lerp(gameObject.transform.localScale, new Vector3(0f, 0f, 0f), Time.deltaTime * 10);
         }
     }
 
     public void showDialog(int dialogIndex, Action<string, bool, Dictionary<string, dynamic>> callback, Dictionary<string, dynamic> pass_gameObject)
     {
-        if (dialogIndex == 1){
+        if (dialogIndex == 1)
+        {
             m_inputField.contentType = TMPro.TMP_InputField.ContentType.DecimalNumber;
         }
-        else if (dialogIndex == 0){
+        else if (dialogIndex == 0)
+        {
             m_inputField.contentType = TMPro.TMP_InputField.ContentType.Standard;
         }
         m_dialogIconImage.sprite = m_dialogIcon[dialogIndex];
@@ -56,23 +63,26 @@ public class DialogGUI : MonoBehaviour
         m_isShowing = true;
         m_inputField.Select();
         m_inputField.ActivateInputField();
-        
+
         GUIManager.Instance.showBlocker();
     }
 
-    public void storeData(){
+    public void storeData()
+    {
         m_isInputEntered = true;
         closeDialog();
     }
 
-    public void closeDialog(){
+    public void closeDialog()
+    {
         m_callback(m_inputField.text, m_isInputEntered, m_passGameObject);
         GUIManager.Instance.hideBlocker();
         m_isShowing = false;
         reset();
     }
 
-    private void reset(){
+    private void reset()
+    {
         m_inputField.text = String.Empty;
         m_isInputEntered = false;
         m_callback = null;

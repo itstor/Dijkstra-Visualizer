@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public class PathfindingManager : MonoBehaviour {
-    
+public class PathfindingManager : MonoBehaviour
+{
+
     public static PathfindingManager Instance;
     public IEnumerator m_Coroutine;
     public states.PFStates m_TaskState = states.PFStates.Idle;
@@ -27,13 +28,15 @@ public class PathfindingManager : MonoBehaviour {
         m_Coroutine = task;
     }
 
-    public void start(){
+    public void start()
+    {
         PathfindingManager.Instance.m_TaskState = states.PFStates.Running;
 
         StartCoroutine(m_Coroutine);
     }
 
-    public void stop(){
+    public void stop()
+    {
         m_TaskState = states.PFStates.Stopped;
         StopCoroutine(m_Coroutine);
     }

@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class AppSettings : MonoBehaviour {
+public class AppSettings : MonoBehaviour
+{
 
     public static AppSettings Instance = null;
-    public int m_targetFrameRate;                         
+    public int m_targetFrameRate;
 
     void Awake()
     {

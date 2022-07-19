@@ -50,18 +50,19 @@ public class ToastGUI : MonoBehaviour
             newToastTextColor.a = Mathf.Lerp(newToastTextColor.a, 0, m_fadeSpeed * Time.deltaTime);
             newToastBoxColor.a = Mathf.Lerp(newToastBoxColor.a, 0, m_fadeSpeed * Time.deltaTime);
             m_toastBox.color = newToastBoxColor;
-            m_toastText.color = newToastTextColor;        
+            m_toastText.color = newToastTextColor;
         }
     }
 
-    public void showToast(string message, float duration, bool highPriority = false){
+    public void showToast(string message, float duration, bool highPriority = false)
+    {
         if (highPriority)
         {
             highPrioritizedToast(message, duration);
             return;
         }
 
-        m_ToastQueue.Enqueue((message,duration));
+        m_ToastQueue.Enqueue((message, duration));
     }
 
     void highPrioritizedToast(string message, float duration)

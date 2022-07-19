@@ -5,20 +5,25 @@ using UnityEngine;
 public class Node : MonoBehaviour
 {
     private string m_nodeNameProperty;
-    public Dictionary<Node, EdgeData> m_connectedNodes =  new Dictionary<Node, EdgeData>();
+    public Dictionary<Node, EdgeData> m_connectedNodes = new Dictionary<Node, EdgeData>();
     [HideInInspector] public NodeState m_nodeState;
-    [SerializeField] public string m_nodeName { 
-        get { 
-            return m_nodeNameProperty; 
-        } 
-        set {
+    [SerializeField]
+    public string m_nodeName
+    {
+        get
+        {
+            return m_nodeNameProperty;
+        }
+        set
+        {
             m_nodeNameProperty = value;
-            GetComponent<NodeTextController>().updateNodeName(value); 
-        } 
+            GetComponent<NodeTextController>().updateNodeName(value);
+        }
     }
 
 
-    void Start(){
+    void Start()
+    {
         m_nodeState = GetComponent<NodeState>();
     }
 
@@ -28,25 +33,27 @@ public class Node : MonoBehaviour
         if (!m_connectedNodes.ContainsKey(to))
         {
             m_connectedNodes.Add(to, edge_data);
-            
+
             return true;
         }
 
         return false;
     }
 
-    public bool allowConnect(Node to){
+    public bool allowConnect(Node to)
+    {
         if (!m_connectedNodes.ContainsKey(to))
         {
             return true;
         }
-        
+
         return false;
     }
 
     /* check if this node already connected to the given node. If so, return true, otherwise false.
     This function is used to change the shape of edge line arrow */
-    public bool checkTwoWayConnection(Node from){
+    public bool checkTwoWayConnection(Node from)
+    {
         if (m_connectedNodes.ContainsKey(from))
         {
             // Debug.Log("Two Way");
@@ -57,13 +64,15 @@ public class Node : MonoBehaviour
         return false;
     }
 
-    public void deleteNode(){
+    public void deleteNode()
+    {
         GraphManager.Instance.deleteNode(this);
 
         Destroy(this.gameObject);
     }
 
-    public EdgeData getEdgeData(Node node){
+    public EdgeData getEdgeData(Node node)
+    {
         if (m_connectedNodes.ContainsKey(node))
         {
             return m_connectedNodes[node];

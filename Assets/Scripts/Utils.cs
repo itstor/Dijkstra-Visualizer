@@ -6,7 +6,7 @@ public class Utils
     {
         Vector3 mousePosition = Input.mousePosition;
         var pos = Camera.main.ScreenToWorldPoint(mousePosition);
-        
+
         return pos;
     }
 }
